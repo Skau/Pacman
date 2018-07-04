@@ -3,10 +3,13 @@
 class Dot : public Entity
 {
 public:
-	Dot();
+	Dot(sf::Image& image);
+	Dot(sf::Image& image, std::shared_ptr<Tile> SpawnTile);
 	~Dot();
 
-	void init() override;
+	std::shared_ptr<Tile> CurrentTile;
+
+	void init(std::shared_ptr<Tile>& CurrentTileIn) override;
 	void tick(float deltaTime) override;
 };
 

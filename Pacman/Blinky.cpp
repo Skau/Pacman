@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Globals.h"
 
-Blinky::Blinky()
+Blinky::Blinky(sf::Image& image) : Entity{ image }
 {
 }
 
@@ -12,7 +12,7 @@ Blinky::~Blinky()
 {
 }
 
-void Blinky::init()
+void Blinky::init(std::shared_ptr<Tile>& CurrentTileIn)
 {
 	if (!texture->loadFromFile("images/blinky.png"))
 	{

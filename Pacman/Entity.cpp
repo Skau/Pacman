@@ -4,15 +4,11 @@
 #include "Entity.h"
 #include "Globals.h"
 
-Entity::Entity() : pos{0,0}, vel{0,0}
+Entity::Entity(sf::Image& image) : pos{0,0}, vel{0,0}
 {
 	texture = std::unique_ptr<sf::Texture>(new sf::Texture);
 	sprite = std::unique_ptr<sf::Sprite>(new sf::Sprite);
 	colBox = std::unique_ptr<sf::RectangleShape>(new sf::RectangleShape);
-}
-
-Entity::~Entity()
-{
 }
 
 void Entity::render(sf::RenderWindow& renderWindow)

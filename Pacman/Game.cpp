@@ -8,37 +8,61 @@
 #include "Blinky.h"
 #include "Dot.h"
 #include "picojson.h"
-
+#include "ImageManager.h"
+#include "Tile.h"
+#include "Map.h"
 void Game::init()
 {
-	sf::ContextSettings settings;
-	settings.antialiasingLevel = 8;
+	window = std::unique_ptr<sf::RenderWindow>(new sf::RenderWindow(sf::VideoMode(globals::SCREEN_WIDHT, globals::SCREEN_HEIGHT), "Pacman", sf::Style::Close));
+	window->setFramerateLimit(120);
+	window->setKeyRepeatEnabled(true);
+	
+	imageManager = std::shared_ptr<ImageManager>(new ImageManager());
 
-	window = std::unique_ptr<sf::RenderWindow>(new sf::RenderWindow(sf::VideoMode(globals::SCREEN_WIDHT, globals::SCREEN_HEIGHT), "lol", sf::Style::Close));
-	window->setFramerateLimit(60);
-	window->setKeyRepeatEnabled(false);
+	map = std::shared_ptr<Map>(new Map(imageManager));
+
+	loadImages();
 
 	beginPlay();
 }
 
+void Game::loadImages()
+{
+	sf::Image sprite;
+	if (!sprite.loadFromFile("images/blackImage.png"))
+	{
+		std::cout << "Failed to load red image!" << std::endl;
+	}
+	imageManager->addImage(sprite);
+	if (!sprite.loadFromFile("images/blueImage.png"))
+	{
+		std::cout << "Failed to load blue image!" << std::endl;
+	}
+	imageManager->addImage(sprite);
+	if (!sprite.loadFromFile("images/lightBlueImage.png"))
+	{
+		std::cout << "Failed to load blue image!" << std::endl;
+	}
+	imageManager->addImage(sprite);
+	if (!sprite.loadFromFile("images/yellowImage.png"))
+	{
+		std::cout << "Failed to load blue image!" << std::endl;
+	}
+	imageManager->addImage(sprite);
+	if (!sprite.loadFromFile("images/orangeImage.png"))
+	{
+		std::cout << "Failed to load blue image!" << std::endl;
+	}
+	imageManager->addImage(sprite);
+}
+
 void Game::beginPlay()
 {
-	pacman = std::shared_ptr<Pacman>(new Pacman);
-	pacman->init();
-	pacman->setPos(sf::Vector2f(100, 100));
-	pacman->SetIsControllable(true);
+	map->loadMap();
 
-	std::shared_ptr<Blinky> b = std::shared_ptr<Blinky>(new Blinky);
-	b->init();
-	b->setPos(sf::Vector2f(700, 100));
-	allEntities.push_back(b);
-	
-	for (int i = 100; i < 600; i+=100)
-	{
-		allEntities.push_back(std::shared_ptr<Dot>(new Dot));
-		allEntities.back()->init();
-		allEntities.back()->setPos(sf::Vector2f((float)i, 450));
-	}
+	pacman = std::shared_ptr<Pacman>(new Pacman(imageManager->getImage(3), map->GetSpawnTile()));
+    pacman->SetIsControllable(true);
+	pacman->setMap(map);
 
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
@@ -55,16 +79,6 @@ void Game::gameLoop()
 
 		mainTick();
 
-		int index = 0;
-		for (auto& entity : allEntities)
-		{
-			if (entity->getIsDestroyed())
-			{
-				allEntities.erase(allEntities.begin() + index);
-			}
-			index++;
-		}
-
 		render();
 	}
 }
@@ -76,6 +90,7 @@ void Game::handleEvents()
 	{
 		if (event.type == sf::Event::Closed)
 		{
+
 			window->close();
 		}
 		pacman->handleEvent(event);
@@ -90,16 +105,6 @@ void Game::mainTick()
 
 		pacman->tick(timePerFrame.asSeconds());
 
-		for (auto& entity : allEntities)
-		{
-			checkIntersect(entity->getColBox());
-		}
-
-		for (auto& entity : allEntities)
-		{
-
-			entity->tick(timePerFrame.asSeconds());
-		}
 	}
 }
 
@@ -107,39 +112,22 @@ void Game::render()
 {
 	window->clear(sf::Color::Black);
 
-
-
+	map->drawMap(*window);
 
 	pacman->render(*window);
-
-	for (auto& entity : allEntities)
-	{
-		entity->render(*window);
-	}
 
 	window->display();
 }
 
-bool Game::checkIntersect(sf::RectangleShape& other)
+bool Game::checkIntersect()
 {
-	int index = 0;
-	for (auto& entity : allEntities)
+	for (auto& Tile : map->getAllTiles())
 	{
-		if (pacman->getColBox().getGlobalBounds().intersects(entity->getColBox().getGlobalBounds()))
+		if (Tile->getPos() == pacman->getPos())
 		{
-			auto d = std::dynamic_pointer_cast<Dot>(entity);
-			if (d)
-			{
-				d->setIsDestroyed(true);
-				allEntities.erase(allEntities.begin() + index);
-			}
-			else
-			{
-				pacman->setPos(sf::Vector2f(400,300));
-			}
+			std::cout << "Collided with tile: " << Tile->getTileID() << std::endl;
 			return true;
 		}
-		index++;
 	}
 	return false;
 }

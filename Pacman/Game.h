@@ -1,29 +1,38 @@
 #pragma once
 class Pacman;
 class Entity;
+class Tile;
+class ImageManager;
+class Map;
 class Game
 {
 public:
 	Game() = default;
 	~Game() = default;
-
 	void init();
+private:
+	void loadImages();
+	
 	void beginPlay();
 	void gameLoop();
 	void handleEvents();
 	void mainTick();
 	void render();
 
-	bool checkIntersect(sf::RectangleShape& other);
+	bool checkIntersect();
 
-private:
+
 	std::unique_ptr<sf::RenderWindow> window;
 	sf::Clock frameClock;
-	const sf::Time timePerFrame = sf::seconds(1.0f / 60.0f);
+	const sf::Time timePerFrame = sf::seconds(1.0f / 15.f);
 	sf::Time timeSinceLastUpdate;
 
 	std::shared_ptr<Pacman> pacman;
 
 	std::vector<std::shared_ptr<Entity>> allEntities;
+
+	std::shared_ptr<ImageManager> imageManager;
+
+	std::shared_ptr<Map> map;
 };
 

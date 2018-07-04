@@ -3,10 +3,10 @@
 class Blinky : public Entity
 {
 public:
-	Blinky();
+	Blinky(sf::Image& image);
 	~Blinky();
 
-	void init() override;
+	void init(std::shared_ptr<Tile>& CurrentTileIn) override;
 	void tick(float deltaTime) override;
 
 	void move(float deltaTime);

@@ -1,12 +1,15 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+
+class Tile;
+
 class Entity
 {
 public:
-	Entity();
-	~Entity();
+	Entity(sf::Image& image);
+	virtual ~Entity() = default;
 
-	virtual void init()=0;
+	virtual void init(std::shared_ptr<Tile>& CurrentTileIn)=0;
 	virtual void tick(float deltaTime)=0;
 
 	void render(sf::RenderWindow& renderWindow);
@@ -19,7 +22,8 @@ public:
 	sf::Vector2f getPos() { return pos; }
 	void SetIsControllable(bool Value) { isControllable = Value; }
 
-	sf::Vector2f spawnpoint;
+	void setSpawnpoint(sf::Vector2f sp) { spawnpoint = sp; }
+	sf::Vector2f getSpawnpooint() { return spawnpoint; }
 
 	bool getIsDestroyed() { return isDestroyed; }
 	void setIsDestroyed(bool value) { isDestroyed = value; }
@@ -27,6 +31,10 @@ public:
 protected:
 	sf::Vector2f pos;
 	sf::Vector2f vel;
+	sf::Vector2f spawnpoint;
+
+	bool moving;
+
 	bool isControllable;
 
 	std::string imagePath;
@@ -35,7 +43,7 @@ protected:
 	std::unique_ptr<sf::Sprite> sprite;
 	std::unique_ptr<sf::RectangleShape> colBox;
 
-	const int VELOCITY = 250;
+	const int VELOCITY = 16;
 
 	bool isDestroyed = false;
 
