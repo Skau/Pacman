@@ -105,7 +105,7 @@ void Pacman::move(float deltaTime)
 
 			if (CurrentTile->GetTileUp())
 			{
-				if (CurrentTile->GetTileUp()->getIsWalkable())
+				if (CurrentTile->GetTileUp()->getIsWalkable() && !CurrentTile->GetTileUp()->getIsPlayerBlock())
 				{
 					std::cout << "Tile " << CurrentTile->GetTileUp()->getTileID() << " is walkable above!\n";
 					pos = CurrentTile->GetTileUp()->getPos();
@@ -132,7 +132,7 @@ void Pacman::move(float deltaTime)
 		{
 			if (CurrentTile->getTileDown())
 			{
-				if (CurrentTile->getTileDown()->getIsWalkable())
+				if (CurrentTile->getTileDown()->getIsWalkable() && !CurrentTile->getTileDown()->getIsPlayerBlock())
 				{
 					std::cout << "Tile " << CurrentTile->getTileDown()->getTileID() << " is walkable below!\n";
 					pos = CurrentTile->getTileDown()->getPos();
@@ -181,7 +181,7 @@ void Pacman::move(float deltaTime)
 				}
 				else
 				{
-					if (CurrentTile->getTileRight()->getIsWalkable())
+					if (CurrentTile->getTileRight()->getIsWalkable() && !CurrentTile->getTileRight()->getIsPlayerBlock())
 					{
 						std::cout << "Tile " << CurrentTile->getTileRight()->getTileID() << " is walkable to the right!\n";
 						pos = CurrentTile->getTileRight()->getPos();
@@ -231,7 +231,7 @@ void Pacman::move(float deltaTime)
 				}
 				else
 				{
-					if (CurrentTile->getTileLeft()->getIsWalkable())
+					if (CurrentTile->getTileLeft()->getIsWalkable() && !CurrentTile->getTileLeft()->getIsPlayerBlock())
 					{
 						std::cout << "Tile " << CurrentTile->getTileLeft()->getTileID() << " is walkable to the left!\n";
 						pos = CurrentTile->getTileLeft()->getPos();

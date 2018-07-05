@@ -3,7 +3,8 @@
 class Tile
 {
 public:
-	Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, bool Walkable, bool Spawnpoint, bool Teleporter, int tileIDIn);
+	Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, 
+		bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, int tileIDIn);
 	~Tile();
 
 	void Draw(sf::RenderWindow& window);
@@ -40,6 +41,10 @@ public:
 
 	bool getHasDot() { return hasDot; }
 
+	bool getIsPlayerBlock() { return isPlayerBlock; }
+
+	bool getIsIntersection() { return isIntersection; }
+
 	void destroyDot();
 
 private:
@@ -68,5 +73,9 @@ private:
 	bool isTeleporter;
 
 	bool hasDot;
+
+	bool isPlayerBlock;
+
+	bool isIntersection;
 };
 

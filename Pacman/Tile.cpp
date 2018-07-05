@@ -1,8 +1,11 @@
 #include "Tile.h"
 #include <iostream>
 
-Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, bool Walkable, bool Spawnpoint, bool Teleporter, int TileIDin) :
-	isWalkable{ Walkable }, isSpawnpoint{ Spawnpoint }, isTeleporter{ Teleporter }, tileID { TileIDin }
+Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, 
+	bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, int TileIDin) :
+	isWalkable{ Walkable }, isSpawnpoint{ Spawnpoint }, isTeleporter{ Teleporter }, isPlayerBlock{ playerBlock }, isIntersection{ Intersection }, tileID {
+	TileIDin
+}
 { 
 	baseTexture = std::unique_ptr<sf::Texture>(new sf::Texture);
 

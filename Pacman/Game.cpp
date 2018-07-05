@@ -54,6 +54,11 @@ void Game::loadImages()
 		std::cout << "Failed to load blue image!" << std::endl;
 	}
 	imageManager->addImage(sprite);
+	if (!sprite.loadFromFile("images/purpleImage.png"))
+	{
+		std::cout << "Failed to load blue image!" << std::endl;
+	}
+	imageManager->addImage(sprite);
 }
 
 void Game::beginPlay()

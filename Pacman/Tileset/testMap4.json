@@ -3305,25 +3305,6 @@
                 }, 
                 {
                  "height":16,
-                 "id":235,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"walkTile",
-                 "visible":true,
-                 "width":16,
-                 "x":288,
-                 "y":256
-                }, 
-                {
-                 "height":16,
                  "id":236,
                  "name":"",
                  "properties":
@@ -5682,7 +5663,7 @@
                 {
                  "height":16,
                  "id":371,
-                 "name":"",
+                 "name":"EnemySpawn3",
                  "properties":
                     {
                      "isWalkable":true
@@ -5692,7 +5673,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":192,
@@ -5711,7 +5692,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":208,
@@ -5730,7 +5711,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":224,
@@ -5739,7 +5720,7 @@
                 {
                  "height":16,
                  "id":374,
-                 "name":"",
+                 "name":"EnemySpawn4",
                  "properties":
                     {
                      "isWalkable":true
@@ -5749,7 +5730,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":240,
@@ -5768,7 +5749,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":240,
@@ -5787,7 +5768,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":224,
@@ -5806,7 +5787,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":208,
@@ -5825,7 +5806,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":192,
@@ -5834,7 +5815,7 @@
                 {
                  "height":16,
                  "id":379,
-                 "name":"",
+                 "name":"EnemySpawn1",
                  "properties":
                     {
                      "isWalkable":true
@@ -5844,7 +5825,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":192,
@@ -5863,7 +5844,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":208,
@@ -5882,7 +5863,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":224,
@@ -5891,7 +5872,7 @@
                 {
                  "height":16,
                  "id":382,
-                 "name":"",
+                 "name":"EnemySpawn2",
                  "properties":
                     {
                      "isWalkable":true
@@ -5901,7 +5882,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":240,
@@ -5920,7 +5901,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"playerBlock",
                  "visible":true,
                  "width":16,
                  "x":208,
@@ -5939,7 +5920,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"playerBlock",
                  "visible":true,
                  "width":16,
                  "x":224,
@@ -5958,7 +5939,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":256,
@@ -5977,7 +5958,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":256,
@@ -5996,7 +5977,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":256,
@@ -6015,7 +5996,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":176,
@@ -6034,7 +6015,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":176,
@@ -6053,7 +6034,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemySpawnTile",
                  "visible":true,
                  "width":16,
                  "x":176,
@@ -8567,12 +8548,12 @@
                  "height":16,
                  "id":627,
                  "name":"",
-                 "rotation":0,
+                 "rotation":180,
                  "type":"collisionTile",
                  "visible":true,
                  "width":16,
-                 "x":272,
-                 "y":240
+                 "x":288,
+                 "y":256
                 }, 
                 {
                  "height":16,
@@ -11154,6 +11135,25 @@
                  "width":16,
                  "x":144,
                  "y":320
+                }, 
+                {
+                 "height":16,
+                 "id":866,
+                 "name":"",
+                 "properties":
+                    {
+                     "isWalkable":true
+                    },
+                 "propertytypes":
+                    {
+                     "isWalkable":"bool"
+                    },
+                 "rotation":0,
+                 "type":"walkTile",
+                 "visible":true,
+                 "width":16,
+                 "x":288,
+                 "y":256
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -11161,7 +11161,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":866,
+ "nextobjectid":867,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.5",

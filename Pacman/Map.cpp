@@ -62,31 +62,34 @@ void Map::loadMap()
 			std::string type = o["type"].to_str();
 
 			// Check type
-			if (type != "Spawnpoint")
+			if (type == "teleporterTile")
 			{
-				if (type == "teleporterTile")
-				{
-					allTiles.push_back(std::shared_ptr<Tile>(new Tile(
-						imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, false, true, id)));
-					std::cout << "Added teleporter tile with ID " << id << std::endl;
-				}
-				else if (type == "walkTile")
-					allTiles.push_back(std::shared_ptr<Tile>(new Tile(
-						imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, false, false, id)));
-				else if (type == "intersectionTile")
-					allTiles.push_back(std::shared_ptr<Tile>(new Tile(
-						imageManager->getImage(4), imageManager->getImage(2), sf::Vector2f((float)x, (float)y), true, false, false, id)));
-				else if (type == "collisionTile")
-					allTiles.push_back(std::shared_ptr<Tile>(new Tile(
-						imageManager->getImage(4), imageManager->getImage(0), sf::Vector2f((float)x, (float)y), false, false, false, id)));
+				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
+					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, false, true, false, false, id)));
+				std::cout << "Added teleporter tile with ID " << id << std::endl;
 			}
-			else
+			else if (type == "intersectionTile")
+				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
+					imageManager->getImage(4), imageManager->getImage(2), sf::Vector2f((float)x, (float)y), true, false, false, false, true, id)));
+			else if (type == "collisionTile")
+				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
+					imageManager->getImage(4), imageManager->getImage(0), sf::Vector2f((float)x, (float)y), false, false, false, true, false, id)));
+			else if (type == "Spawnpoint")
 			{
 				std::shared_ptr<Tile> newTile = std::shared_ptr<Tile>(new Tile(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, true, false, id));
+					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, true, false, false, false, id));
 				allTiles.push_back(newTile);
 				playerSpawnPoint = newTile;
 			}
+			else if (type == "enemySpawnTile")
+				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
+					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, true, false, false, false, id)));
+			else if(type == "playerBlock")
+				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
+					imageManager->getImage(4), imageManager->getImage(5), sf::Vector2f((float)x, (float)y), true, true, false, true, false, id)));
+			else
+				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
+					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, false, false, false, false, id)));
 		}
 
 
