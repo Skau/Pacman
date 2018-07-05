@@ -22,7 +22,6 @@ public:
 	void ColorSprite();
 
 	void setIsTeleporter(bool Value) { isTeleporter = Value; }
-
 	bool getIsTeleporter() { return isTeleporter; }
 
 	void setTileUp(std::shared_ptr<Tile> TileIn) { TileUp = TileIn; }
@@ -39,6 +38,10 @@ public:
 
 	std::shared_ptr<Tile> getTeleporterTile() { return TeleporterTile; }
 
+	void colorTileRed() { baseSprite->setColor(sf::Color::Red); }
+	void colorTileGreen() { baseSprite->setColor(sf::Color::Green); }
+	void removeColor() { baseSprite->setColor(sf::Color::Transparent); }
+
 	bool getHasDot() { return hasDot; }
 
 	bool getIsPlayerBlock() { return isPlayerBlock; }
@@ -46,6 +49,21 @@ public:
 	bool getIsIntersection() { return isIntersection; }
 
 	void destroyDot();
+
+	void setPacmanIsHere(bool value) { pacmanIsHere = value; }
+	bool getPacmanIsHere() { return pacmanIsHere; }
+
+	void resetGCost() { gCost = 0; }
+	void setGCost(int value) { gCost = value; }
+	int getGCost() { return gCost; }
+
+	void resetHCost() { hCost = 0; }
+	void setHCost(int value) { hCost = value; }
+	int getHCost() { return hCost; }
+
+	void resetFCost() { fCost = 0; }
+	void setFCost(int value) { fCost = value; }
+	int getFCost() { return fCost; }
 
 private:
 	std::unique_ptr<sf::Sprite> baseSprite;
@@ -63,19 +81,19 @@ private:
 	std::shared_ptr<Tile> TileRight;
 	std::shared_ptr<Tile> TileDown;
 	std::shared_ptr<Tile> TeleporterTile;
-
-	bool isSpawnpoint;
-
-	bool isWalkable;
+	std::shared_ptr<Tile> ParentTile;
 
 	int tileID;
+	int gCost;
+	int hCost;
+	int fCost;
 
+	bool pacmanIsHere;
+	bool isSpawnpoint;
+	bool isWalkable;
 	bool isTeleporter;
-
 	bool hasDot;
-
 	bool isPlayerBlock;
-
 	bool isIntersection;
 };
 

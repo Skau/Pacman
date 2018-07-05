@@ -3025,7 +3025,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"Spawnpoint",
+                 "type":"playerSpawnpoint",
                  "visible":true,
                  "width":16,
                  "x":224,
@@ -5673,7 +5673,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"enemySpawnTile",
+                 "type":"enemySpawnTile3",
                  "visible":true,
                  "width":16,
                  "x":192,
@@ -5730,7 +5730,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"enemySpawnTile",
+                 "type":"enemySpawnTile4",
                  "visible":true,
                  "width":16,
                  "x":240,
@@ -5825,7 +5825,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"enemySpawnTile",
+                 "type":"enemySpawnTile1",
                  "visible":true,
                  "width":16,
                  "x":192,
@@ -5882,7 +5882,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"enemySpawnTile",
+                 "type":"enemySpawnTile2",
                  "visible":true,
                  "width":16,
                  "x":240,

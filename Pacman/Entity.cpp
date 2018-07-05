@@ -3,12 +3,36 @@
 #include <iostream>
 #include "Entity.h"
 #include "Globals.h"
+#include "Tile.h"
 
-Entity::Entity(sf::Image& image) : pos{0,0}, vel{0,0}
+Entity::Entity(sf::Image& image, std::shared_ptr<Tile>& SpawnTile) : pos{0,0}, vel{0,0}
 {
 	texture = std::unique_ptr<sf::Texture>(new sf::Texture);
 	sprite = std::unique_ptr<sf::Sprite>(new sf::Sprite);
 	colBox = std::unique_ptr<sf::RectangleShape>(new sf::RectangleShape);
+
+	if (!texture->loadFromImage(image))
+	{
+		std::cerr << "Failed to load texture for entity!\n";
+	}
+	texture->setSmooth(true);
+	sprite->setTexture(*texture);
+	if (SpawnTile)
+	{
+		CurrentTile = SpawnTile;
+		pos = CurrentTile->getPos();
+	}
+	auto p = texture->getSize();
+	auto pp = sf::Vector2f(p);
+	sprite->setOrigin(sf::Vector2f(pp.x / 2, pp.y / 2));
+
+	sprite->setPosition(pos);
+	colBox->setSize(pp);
+	colBox->setOrigin(sf::Vector2f(pp.x / 2, pp.y / 2));
+
+	colBox->setFillColor(sf::Color::Transparent);
+	colBox->setPosition(pos);
+
 }
 
 void Entity::render(sf::RenderWindow& renderWindow)

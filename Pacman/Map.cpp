@@ -1,19 +1,11 @@
 #include "Map.h"
-#include <SFML/System/Time.hpp>
 #include <fstream>
 #include <string>
-#include <sstream>
 #include <iostream>
 #include "picojson.h"
 #include "ImageManager.h"
 
-Map::Map(std::shared_ptr<ImageManager>& im) : w{28}, h{36}
-{
-	imageManager = im;
-}
-
-
-Map::~Map()
+Map::Map(std::shared_ptr<ImageManager>& im) : imageManager{ im }
 {
 }
 
@@ -23,7 +15,7 @@ void Map::loadMap()
 	picojson::value v;
 
 	// Open and parse the JSON file
-	levelData.open("Tileset/testMap4.json");
+	levelData.open("map/pacmanMap.json");
 	picojson::parse(v, levelData);
 
 	// Total object of the file
@@ -42,6 +34,7 @@ void Map::loadMap()
 		// Array object of "objects"
 		picojson::value::array& objectArray = dataValue.get<picojson::value::array>();
 
+		std::cout << "Started spawning tiles!\n";
 		// Loop through "objects"
 		for (int i = 0; i < objectArray.size(); ++i)
 		{
@@ -56,30 +49,54 @@ void Map::loadMap()
 			// Get the ID
 			int id = std::stoul(o["id"].to_str());
 
-			//std::cout << "Creating Tile" << id << " at [" << x << "," << y << "]\n";
-
 			// Get the type
 			std::string type = o["type"].to_str();
 
-			// Check type
+			// Check type and spawn tile with correct properties
 			if (type == "teleporterTile")
-			{
 				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
 					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, false, true, false, false, id)));
-				std::cout << "Added teleporter tile with ID " << id << std::endl;
-			}
 			else if (type == "intersectionTile")
 				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
 					imageManager->getImage(4), imageManager->getImage(2), sf::Vector2f((float)x, (float)y), true, false, false, false, true, id)));
 			else if (type == "collisionTile")
 				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
 					imageManager->getImage(4), imageManager->getImage(0), sf::Vector2f((float)x, (float)y), false, false, false, true, false, id)));
-			else if (type == "Spawnpoint")
+			else if (type == "playerSpawnpoint")
 			{
 				std::shared_ptr<Tile> newTile = std::shared_ptr<Tile>(new Tile(
 					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, true, false, false, false, id));
 				allTiles.push_back(newTile);
+				newTile->setPacmanIsHere(true);
 				playerSpawnPoint = newTile;
+			}
+			else if (type == "enemySpawnTile1")
+			{
+				std::shared_ptr<Tile> newTile = std::shared_ptr<Tile>(new Tile(
+					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, true, false, false, false, id));
+				enemy1Spawnpoint = newTile;
+				allTiles.push_back(newTile);
+			}
+			else if (type == "enemySpawnTile2")
+			{
+				std::shared_ptr<Tile> newTile = std::shared_ptr<Tile>(new Tile(
+					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, true, false, false, false, id));
+				enemy2Spawnpoint = newTile;
+				allTiles.push_back(newTile);
+			}
+			else if (type == "enemySpawnTile3")
+			{
+				std::shared_ptr<Tile> newTile = std::shared_ptr<Tile>(new Tile(
+					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, true, false, false, false, id));
+				enemy3Spawnpoint = newTile;
+				allTiles.push_back(newTile);
+			}
+			else if (type == "enemySpawnTile4")
+			{
+				std::shared_ptr<Tile> newTile = std::shared_ptr<Tile>(new Tile(
+					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, true, false, false, false, id));
+				enemy4Spawnpoint = newTile;
+				allTiles.push_back(newTile);
 			}
 			else if (type == "enemySpawnTile")
 				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
@@ -92,6 +109,7 @@ void Map::loadMap()
 					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), true, false, false, false, false, id)));
 		}
 
+		std::cout << "Spawning tiles DONE!\n";
 
 		std::cout << "Setting tile pointers!\n";
 		for (int i = 0; i < allTiles.size(); ++i)
@@ -130,18 +148,5 @@ void Map::drawMap(sf::RenderWindow& window)
 	{
 		tile->Draw(window);
 	}
-}
-
-sf::Vector2f Map::getPlayerSpawnpoint()
-{
-	sf::Vector2f pos = sf::Vector2f(0.f,0.f);
-	for (auto& tile : allTiles)
-	{
-		if (tile->getIfSpawnpoint())
-		{
-			pos = tile->getPos();
-		}
-	}
-	return pos;
 }
 

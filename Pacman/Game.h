@@ -7,8 +7,9 @@ class Map;
 class Game
 {
 public:
-	Game() = default;
-	~Game() = default;
+	Game()=default;
+	~Game()=default;
+
 	void init();
 private:
 	void loadImages();
@@ -19,19 +20,18 @@ private:
 	void mainTick();
 	void render();
 
-	bool checkIntersect();
-
 	std::unique_ptr<sf::RenderWindow> window;
-	sf::Clock frameClock;
-	const sf::Time timePerFrame = sf::seconds(1.0f / 15.f);
-	sf::Time timeSinceLastUpdate;
+
+	std::shared_ptr<ImageManager> imageManager;
+	
+	std::shared_ptr<Map> map;
 
 	std::shared_ptr<Pacman> pacman;
 
 	std::vector<std::shared_ptr<Entity>> allEntities;
 
-	std::shared_ptr<ImageManager> imageManager;
-
-	std::shared_ptr<Map> map;
+	sf::Clock frameClock;
+	const sf::Time timePerFrame = sf::seconds(1.0f / 60.f);
+	sf::Time timeSinceLastUpdate;
 };
 

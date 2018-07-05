@@ -1,45 +1,13 @@
 #include "Pacman.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <memory>
 #include "Globals.h"
-#include "Dot.h"
 #include "Tile.h"
 #include "Map.h"
-Pacman::Pacman(sf::Image& image) : Entity{ image }
+
+Pacman::Pacman(sf::Image & image, std::shared_ptr<Tile>& SpawnTile) : Entity{ image, SpawnTile }
 {
-}
-
-Pacman::Pacman(sf::Image & image, std::shared_ptr<Tile> SpawnTile) : Entity{ image }
-{
-	if (!texture->loadFromImage(image))
-	{
-		std::cerr << "Failed to load texture for entity!\n";
-	}
-	texture->setSmooth(true);
-	sprite->setTexture(*texture);
-
-	auto p = texture->getSize();
-	auto pp = sf::Vector2f(p);
-	sprite->setOrigin(sf::Vector2f(pp.x / 2, pp.y / 2));
-	if (SpawnTile)
-	{
-		pos = SpawnTile->getPos();
-		CurrentTile = SpawnTile;
-	}
-	spawnpoint = pos;
-	sprite->setPosition(pos);
-	colBox->setSize(pp);
-	colBox->setOrigin(sf::Vector2f(pp.x / 2, pp.y / 2));
-
-	colBox->setFillColor(sf::Color::Transparent);
-	colBox->setPosition(pos);
-
 	std::cout << "Player pos: " << pos.x << ", " << pos.y << std::endl;
-}
-
-void Pacman::init(std::shared_ptr<Tile>& CurrentTileIn)
-{
 }
 
 void Pacman::handleEvent(sf::Event & event)
@@ -109,7 +77,9 @@ void Pacman::move(float deltaTime)
 				{
 					std::cout << "Tile " << CurrentTile->GetTileUp()->getTileID() << " is walkable above!\n";
 					pos = CurrentTile->GetTileUp()->getPos();
+					CurrentTile->setPacmanIsHere(false);
 					CurrentTile = CurrentTile->GetTileUp();
+					CurrentTile->setPacmanIsHere(true);
 					if (CurrentTile->getHasDot())
 					{
 						CurrentTile->destroyDot();
@@ -136,7 +106,9 @@ void Pacman::move(float deltaTime)
 				{
 					std::cout << "Tile " << CurrentTile->getTileDown()->getTileID() << " is walkable below!\n";
 					pos = CurrentTile->getTileDown()->getPos();
+					CurrentTile->setPacmanIsHere(false);
 					CurrentTile = CurrentTile->getTileDown();
+					CurrentTile->setPacmanIsHere(true);
 					if (CurrentTile->getHasDot())
 					{
 						CurrentTile->destroyDot();
@@ -170,7 +142,9 @@ void Pacman::move(float deltaTime)
 						if (tile->getIsTeleporter() && tile != CurrentTile->getTileRight())
 						{
 							pos = tile->getPos();
+							CurrentTile->setPacmanIsHere(false);
 							CurrentTile = tile;
+							CurrentTile->setPacmanIsHere(true);
 							if (CurrentTile->getHasDot())
 							{
 								CurrentTile->destroyDot();
@@ -185,7 +159,9 @@ void Pacman::move(float deltaTime)
 					{
 						std::cout << "Tile " << CurrentTile->getTileRight()->getTileID() << " is walkable to the right!\n";
 						pos = CurrentTile->getTileRight()->getPos();
+						CurrentTile->setPacmanIsHere(false);
 						CurrentTile = CurrentTile->getTileRight();
+						CurrentTile->setPacmanIsHere(true);
 						if (CurrentTile->getHasDot())
 						{
 							CurrentTile->destroyDot();
@@ -220,7 +196,9 @@ void Pacman::move(float deltaTime)
 						if (tile->getIsTeleporter() && tile != CurrentTile->getTileLeft())
 						{
 							pos = tile->getPos();
+							CurrentTile->setPacmanIsHere(false);
 							CurrentTile = tile;
+							CurrentTile->setPacmanIsHere(true);
 							if (CurrentTile->getHasDot())
 							{
 								CurrentTile->destroyDot();
@@ -235,7 +213,9 @@ void Pacman::move(float deltaTime)
 					{
 						std::cout << "Tile " << CurrentTile->getTileLeft()->getTileID() << " is walkable to the left!\n";
 						pos = CurrentTile->getTileLeft()->getPos();
+						CurrentTile->setPacmanIsHere(false);
 						CurrentTile = CurrentTile->getTileLeft();
+						CurrentTile->setPacmanIsHere(true);
 						if (CurrentTile->getTileRight()->getHasDot())
 						{
 							CurrentTile->destroyDot();

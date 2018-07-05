@@ -4,8 +4,7 @@
 Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, 
 	bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, int TileIDin) :
 	isWalkable{ Walkable }, isSpawnpoint{ Spawnpoint }, isTeleporter{ Teleporter }, isPlayerBlock{ playerBlock }, isIntersection{ Intersection }, tileID {
-	TileIDin
-}
+	TileIDin }, gCost{ 0 }
 { 
 	baseTexture = std::unique_ptr<sf::Texture>(new sf::Texture);
 

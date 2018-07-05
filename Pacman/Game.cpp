@@ -6,7 +6,6 @@
 #include "Entity.h"
 #include "Pacman.h"
 #include "Blinky.h"
-#include "Dot.h"
 #include "picojson.h"
 #include "ImageManager.h"
 #include "Tile.h"
@@ -31,7 +30,7 @@ void Game::loadImages()
 	sf::Image sprite;
 	if (!sprite.loadFromFile("images/blackImage.png"))
 	{
-		std::cout << "Failed to load red image!" << std::endl;
+		std::cout << "Failed to load black image!" << std::endl;
 	}
 	imageManager->addImage(sprite);
 	if (!sprite.loadFromFile("images/blueImage.png"))
@@ -41,22 +40,27 @@ void Game::loadImages()
 	imageManager->addImage(sprite);
 	if (!sprite.loadFromFile("images/lightBlueImage.png"))
 	{
-		std::cout << "Failed to load blue image!" << std::endl;
+		std::cout << "Failed to load lightblue image!" << std::endl;
 	}
 	imageManager->addImage(sprite);
 	if (!sprite.loadFromFile("images/yellowImage.png"))
 	{
-		std::cout << "Failed to load blue image!" << std::endl;
+		std::cout << "Failed to load yellow image!" << std::endl;
 	}
 	imageManager->addImage(sprite);
 	if (!sprite.loadFromFile("images/orangeImage.png"))
 	{
-		std::cout << "Failed to load blue image!" << std::endl;
+		std::cout << "Failed to load orange image!" << std::endl;
 	}
 	imageManager->addImage(sprite);
 	if (!sprite.loadFromFile("images/purpleImage.png"))
 	{
-		std::cout << "Failed to load blue image!" << std::endl;
+		std::cout << "Failed to load purple image!" << std::endl;
+	}
+	imageManager->addImage(sprite);
+	if (!sprite.loadFromFile("images/redImage.png"))
+	{
+		std::cout << "Failed to load red image!" << std::endl;
 	}
 	imageManager->addImage(sprite);
 }
@@ -65,9 +69,12 @@ void Game::beginPlay()
 {
 	map->loadMap();
 
-	pacman = std::shared_ptr<Pacman>(new Pacman(imageManager->getImage(3), map->GetSpawnTile()));
+	pacman = std::shared_ptr<Pacman>(new Pacman(imageManager->getImage(3), map->getPlayerSpawnTile()));
     pacman->SetIsControllable(true);
 	pacman->setMap(map);
+	allEntities.push_back(pacman);
+
+	allEntities.push_back(std::shared_ptr<Blinky>(new Blinky(imageManager->getImage(6), map->getEnemy1Spawnpoint(), map)));
 
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
@@ -95,7 +102,6 @@ void Game::handleEvents()
 	{
 		if (event.type == sf::Event::Closed)
 		{
-
 			window->close();
 		}
 		pacman->handleEvent(event);
@@ -108,7 +114,8 @@ void Game::mainTick()
 	{
 		timeSinceLastUpdate -= timePerFrame;
 
-		pacman->tick(timePerFrame.asSeconds());
+		for (auto& entity : allEntities)
+			entity->tick(timePerFrame.asSeconds());
 
 	}
 }
@@ -119,21 +126,9 @@ void Game::render()
 
 	map->drawMap(*window);
 
-	pacman->render(*window);
+	for (auto& entity : allEntities)
+		entity->render(*window);
 
 	window->display();
-}
-
-bool Game::checkIntersect()
-{
-	for (auto& Tile : map->getAllTiles())
-	{
-		if (Tile->getPos() == pacman->getPos())
-		{
-			std::cout << "Collided with tile: " << Tile->getTileID() << std::endl;
-			return true;
-		}
-	}
-	return false;
 }
 
