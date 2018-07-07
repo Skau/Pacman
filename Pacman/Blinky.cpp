@@ -6,12 +6,14 @@
 #include "Globals.h"
 #include "Map.h"
 #include "Pacman.h"
-
-Blinky::Blinky(sf::Image& image, std::shared_ptr<Tile> SpawnTile, std::shared_ptr<Map>& MapIn, std::shared_ptr<Pacman> pacmanIn) 
-	: Entity{ image, SpawnTile }, map{MapIn}, pacman{pacmanIn}
+#include "Game.h"
+Blinky::Blinky(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Map> MapIn, Game& game)
+	: Entity{ image, SpawnTile, game }, map{MapIn}
 {
 	std::cout << "Blinky pos: " << pos.x << ", " << pos.y << std::endl;
+	pacman = game.getPacman();
 	EndTile = pacman->getCurrentTile();
+	canMove = true;
 }
 
 void Blinky::tick(float deltaTime)
@@ -21,13 +23,18 @@ void Blinky::tick(float deltaTime)
 
 	std::shared_ptr<Tile> eTile = pacman->getCurrentTile();
 
+	if (CurrentTile == eTile)
+	{
+		game->resetGame();
+	}
+
 	if (EndTile.get() && CurrentTile->getPos() != pacman->getPos())
 	{
 		if (eTile->getPos() != EndTile->getPos())
 		{
 			if (pathToMoveTiles.size())
 			{
-				if (manhattan(pathToMoveTiles[0], eTile) < 1000)
+				if (manhattan(pathToMoveTiles[0], eTile) < 750)
 				{
 					move();
 				}
@@ -161,7 +168,6 @@ void Blinky::generatePath(std::shared_ptr<Tile> finalTile)
 {
 	clearPathToMoveTiles();
 	bool generatingPath = true;
-	finalTile->setImageGreen();
 	pathToMoveTiles.push_back(finalTile);
 	while (generatingPath)
 	{
@@ -169,7 +175,7 @@ void Blinky::generatePath(std::shared_ptr<Tile> finalTile)
 		{
 			if (pathToMoveTiles.back()->getParentTile().get())
 			{
-				if (!findElementPathToMoveTiles(pathToMoveTiles.back()->getParentTile()))
+				if (!findElementPathToMoveTiles(pathToMoveTiles.back()->getParentTile()) && pathToMoveTiles.back()->getParentTile()->getPos() != CurrentTile->getPos())
 				{
 					pathToMoveTiles.push_back(pathToMoveTiles.back()->getParentTile());
 					pathToMoveTiles.back()->setImageGreen();
@@ -194,7 +200,7 @@ void Blinky::generatePath(std::shared_ptr<Tile> finalTile)
 
 void Blinky::move()
 {
-	if (pathToMoveTiles.size())
+	if (pathToMoveTiles.size() && canMove)
 	{
 		CurrentTile = pathToMoveTiles.back();
 		pos = CurrentTile->getPos();
@@ -203,6 +209,7 @@ void Blinky::move()
 		pathToMoveTiles.back()->setImageOriginal();
 		pathToMoveTiles.pop_back();
 	}
+	canMove = !canMove;
 }
 
 void Blinky::calculateCosts(std::shared_ptr<Tile> TileToCalculate, std::shared_ptr<Tile> endTile)

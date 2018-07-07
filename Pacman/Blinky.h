@@ -8,7 +8,7 @@ class Blinky : public Entity
 {
 public:
 	Blinky() = default;
-	Blinky(sf::Image& image, std::shared_ptr<Tile> SpawnTile, std::shared_ptr<Map>& MapIn, std::shared_ptr<Pacman> pacmanIn);
+	Blinky(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Map> MapIn, Game& game);
 	~Blinky()=default;
 
 	void tick(float deltaTime) override;
@@ -34,6 +34,8 @@ public:
 	bool findElementOpenTiles(std::shared_ptr<Tile> TileToCheck);
 
 	void clearPathToMoveTiles();
+
+	bool canMove;
 
 	std::shared_ptr<Pacman> pacman;
 

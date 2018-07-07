@@ -1,10 +1,11 @@
 #include "Tile.h"
 #include <iostream>
+#include "Game.h"
 
-Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, 
+Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Game& g,
 	bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, int TileIDin) :
-	isWalkable{ Walkable }, isSpawnpoint{ Spawnpoint }, isTeleporter{ Teleporter }, isPlayerBlock{ playerBlock }, isIntersection{ Intersection }, tileID {
-	TileIDin }, gCost{ 0 }
+	game{ &g }, isWalkable { Walkable}, isSpawnpoint{ Spawnpoint }, isTeleporter{ Teleporter }, 
+	isPlayerBlock{ playerBlock }, isIntersection{ Intersection }, tileID{ TileIDin }, gCost{ 0 }
 { 
 	baseTexture = std::unique_ptr<sf::Texture>(new sf::Texture);
 
@@ -43,6 +44,7 @@ Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position,
 		dotSprite->setPosition(Position);
 		
 		hasDot = true;
+		game->dotsLeft++;
 	}
 	else
 	{
@@ -75,6 +77,11 @@ void Tile::destroyDot()
 {
 	if (dotSprite)
 	{
+		if (game->dotsLeft)
+			game->dotsLeft--;
+		else
+			game->resetGame();
+
 		dotSprite.release();
 	}
 }

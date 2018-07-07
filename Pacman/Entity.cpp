@@ -5,7 +5,7 @@
 #include "Globals.h"
 #include "Tile.h"
 
-Entity::Entity(sf::Image& image, std::shared_ptr<Tile>& SpawnTile) : pos{0,0}, vel{0,0}
+Entity::Entity(sf::Image& image, std::weak_ptr<Tile> SpawnTile, Game& g) : pos{0,0}, vel{0,0}, game{ &g }
 {
 	texture = std::unique_ptr<sf::Texture>(new sf::Texture);
 	sprite = std::unique_ptr<sf::Sprite>(new sf::Sprite);
@@ -17,9 +17,10 @@ Entity::Entity(sf::Image& image, std::shared_ptr<Tile>& SpawnTile) : pos{0,0}, v
 	}
 	texture->setSmooth(true);
 	sprite->setTexture(*texture);
-	if (SpawnTile)
+	auto st = SpawnTile.lock();
+	if (st)
 	{
-		CurrentTile = SpawnTile;
+		CurrentTile = st;
 		pos = CurrentTile->getPos();
 	}
 	auto p = texture->getSize();

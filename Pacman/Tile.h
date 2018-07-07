@@ -1,9 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+
+class Game;
+
 class Tile
 {
 public:
-	Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, 
+	Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Game& g,
 		bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, int tileIDIn);
 	~Tile();
 
@@ -76,6 +79,8 @@ private:
 	std::unique_ptr<sf::RectangleShape> colBox;
 
 	sf::Vector2f pos;
+
+	Game* game;
 
 	std::shared_ptr<Tile> TileUp;
 	std::shared_ptr<Tile> TileLeft;

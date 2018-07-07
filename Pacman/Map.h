@@ -6,7 +6,7 @@ class ImageManager;
 class Map
 {
 public:
-	Map(std::shared_ptr<ImageManager>& im);
+	Map(std::shared_ptr<ImageManager>& im, Game& g);
 	~Map()=default;
 
 	void loadMap();
@@ -31,5 +31,7 @@ private:
 	std::shared_ptr<Tile> enemy4Spawnpoint;
 
 	std::shared_ptr<ImageManager> imageManager;
+
+	Game* game;
 };
 

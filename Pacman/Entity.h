@@ -2,11 +2,12 @@
 #include <SFML/Graphics.hpp>
 
 class Tile;
+class Game;
 
 class Entity
 {
 public:
-	Entity(sf::Image& image, std::shared_ptr<Tile>& SpawnTile);
+	Entity(sf::Image& image, std::weak_ptr<Tile> SpawnTile, Game& game);
 	virtual ~Entity() = default;
 
 	virtual void tick(float deltaTime)=0;
@@ -28,6 +29,8 @@ protected:
 
 	bool moving;
 	bool isControllable;
+
+	Game* game;
 
 	std::unique_ptr<sf::Texture> texture;
 	std::unique_ptr<sf::Sprite> sprite;

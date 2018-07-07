@@ -5,7 +5,7 @@
 #include "Tile.h"
 #include "Map.h"
 
-Pacman::Pacman(sf::Image & image, std::shared_ptr<Tile>& SpawnTile) : Entity{ image, SpawnTile }
+Pacman::Pacman(sf::Image & image, std::weak_ptr<Tile> SpawnTile, Game& game) : Entity{ image, SpawnTile, game }
 {
 	std::cout << "Player pos: " << pos.x << ", " << pos.y << std::endl;
 }
