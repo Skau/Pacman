@@ -5,157 +5,127 @@
 #include <algorithm>
 #include "Globals.h"
 #include "Map.h"
+#include "Pacman.h"
 
-Blinky::Blinky(sf::Image& image, std::shared_ptr<Tile>& SpawnTile, std::shared_ptr<Map>& MapIn) : Entity{ image, SpawnTile }, map{MapIn}
+Blinky::Blinky(sf::Image& image, std::shared_ptr<Tile> SpawnTile, std::shared_ptr<Map>& MapIn, std::shared_ptr<Pacman> pacmanIn) 
+	: Entity{ image, SpawnTile }, map{MapIn}, pacman{pacmanIn}
 {
 	std::cout << "Blinky pos: " << pos.x << ", " << pos.y << std::endl;
+	EndTile = pacman->getCurrentTile();
 }
 
 void Blinky::tick(float deltaTime)
 {
-	findPath();
-}
+	if (openTiles.size()) openTiles.clear();
+	if (closedTiles.size()) closedTiles.clear();
 
-void Blinky::findPath()
-{
-	std::cout << "Finding start tile\n";
-	std::shared_ptr<Tile> startTile = CurrentTile;
-	std::cout << "Finding end tile\n";
-	std::shared_ptr<Tile> endTile = findEndTile();
-	std::cout << "Found end tile (id: " << endTile->getTileID() << ")"<< std::endl;
+	std::shared_ptr<Tile> eTile = pacman->getCurrentTile();
 
-	startTile->setHCost(manhattan(startTile));
-	startTile->setFCost(0 + startTile->getHCost());
-	std::cout << "Current tile F cost: " << startTile->getFCost() << std::endl;
-	std::cout << "Adding CurrentTile to open tiles\n";
-	openTiles.push_back(startTile);
-	if (startTile.get())
+	if (EndTile.get() && CurrentTile->getPos() != pacman->getPos())
 	{
-		startTile->colorTileGreen();
-	}
-
-	std::cout << "Starting while loop\n";
-	while (openTiles.size() != 0)
-	{
-		std::cout << "Getting tile with lowest F cost\n";
-		std::shared_ptr<Tile>& currentTile = openTiles[getMinfCost()];
-
-		if (currentTile.get())
+		if (eTile->getPos() != EndTile->getPos())
 		{
-			std::cout << "Tile with lowest is Tile: " << currentTile->getTileID() << std::endl;
-		}
-		else
-		{
-			std::cout << "NO CURRENT TILE\n";
-		}
-
-		std::cout << "Removing from openTiles\n";
-		openTiles.erase(remove(openTiles.begin(), openTiles.end(), currentTile), openTiles.end());
-		std::cout << "Adding to closedTiles\n";
-		closedTiles.push_back(currentTile);
-
-		if (currentTile)
-		{
-			startTile->colorTileRed();
-		}
-		std::cout << "Increment gCost\n";
-		currentTile->setGCost(currentTile->getGCost() + 1);
-
-		std::cout << "currentTile == endTile\n";
-		if (currentTile->getPos() == endTile->getPos())
-		{
-			std::cout << "TRUE\n";
-			break;
-		}
-		else
-		{
-			std::cout << "FALSE\n";
-		}
-
-		std::cout << "Finding neighboring tiles\n";
-		findNeighbouringTiles(currentTile);
-
-		std::cout << "Looping through neighboring tiles of size: " << neighboringTiles.size() << std::endl;;
-		for (auto& tile : neighboringTiles)
-		{
-			std::cout << "Setting H cost of Tile" << tile->getTileID() << std::endl;
-			tile->setHCost(manhattan(tile));
-			std::cout << "Setting F cost of Tile\n";
-			tile->setFCost(tile->getHCost() + tile->getGCost());
-			std::cout << "F cost = " << tile->getFCost() << std::endl;
-			std::cout << "Adding to openTiles\n";
-			openTiles.push_back(tile);
-			if (tile)
+			if (pathToMoveTiles.size())
 			{
-				tile->colorTileGreen();
+				if (manhattan(pathToMoveTiles[0], eTile) < 1000)
+				{
+					move();
+				}
+				else
+				{
+					EndTile = pacman->getCurrentTile();
+					findPath(CurrentTile, EndTile);
+				}
+			}
+			else
+			{
+				EndTile = pacman->getCurrentTile();
+				findPath(CurrentTile, EndTile);
 			}
 		}
-		std::cout << "Remvoing currentTile from openTiles\n";
-		openTiles.erase(remove(openTiles.begin(), openTiles.end(), currentTile), openTiles.end());
-		std::cout << "Adding currentTile to closedTiles\n";
+		else
+		{
+			if (pathToMoveTiles.size())
+			{
+				move();
+			}
+			else
+			{
+				EndTile = pacman->getCurrentTile();
+				findPath(CurrentTile, EndTile);
+			}
+		}
+	}
+}
+
+void Blinky::findPath(std::shared_ptr<Tile> startTile, std::shared_ptr<Tile> endTile)
+{
+	startTile->setHCost(manhattan(startTile, endTile));
+	startTile->setFCost(0 + startTile->getHCost());
+	openTiles.push_back(startTile);
+	int i = 0;
+	while (openTiles.size() != 0)
+	{
+		std::shared_ptr<Tile> currentTile = openTiles[getMinfCost()];
+
+		openTiles.erase(std::remove(openTiles.begin(), openTiles.end(), currentTile), openTiles.end());
+
 		closedTiles.push_back(currentTile);
-		if (currentTile)
+
+		currentTile->setGCost(currentTile->getGCost() + 1);
+
+		if (currentTile->getPos() == endTile->getPos())
 		{
-			currentTile->colorTileRed();
+			generatePath(currentTile);
+			break;
+		}
+
+		if (neighboringTiles.size()) neighboringTiles.clear();
+
+		findNeighbouringTiles(currentTile, currentTile->GetTileUp(), endTile);
+		findNeighbouringTiles(currentTile, currentTile->getTileDown(), endTile);
+		findNeighbouringTiles(currentTile, currentTile->getTileLeft(), endTile);
+		findNeighbouringTiles(currentTile, currentTile->getTileRight(), endTile);
+
+		for (int i = 0; i < neighboringTiles.size(); ++i)
+		{
+			calculateCosts(neighboringTiles[i], endTile);
+			openTiles.push_back(neighboringTiles[i]);
 		}
 	}
-	std::cout << "Loop done, clearing closedTiles\n";
-	for (auto& tile : closedTiles)
-	{
-		//tile->resetGCost();
-		//tile->removeColor();
-	}
-	closedTiles.clear();
 }
 
-std::shared_ptr<Tile> Blinky::findEndTile()
+void Blinky::findNeighbouringTiles(std::shared_ptr<Tile> currentTile, std::shared_ptr<Tile> TileToCheck, std::shared_ptr<Tile> endTile)
 {
-	std::shared_ptr<Tile> endTile;
-	for (auto& tile : map->getAllTiles())
+	// Check to see if the neighbor exists
+	if (TileToCheck)
 	{
-		if (tile->getPacmanIsHere())
+		// Check to see if it's possible to move there
+		if (TileToCheck->getIsWalkable())
 		{
-			endTile = tile;
-		}
-	}
-	return endTile;
-}
-
-void Blinky::findNeighbouringTiles(std::shared_ptr<Tile> TileToCheck)
-{
-	if (neighboringTiles.size())
-		neighboringTiles.clear();
-
-	if (TileToCheck->GetTileUp())
-	{
-		if (TileToCheck->GetTileUp()->getIsWalkable() && !findElement(TileToCheck->GetTileUp()))
-		{
-			TileToCheck->GetTileUp()->setGCost(1 + TileToCheck->getGCost());
-			neighboringTiles.push_back(TileToCheck->GetTileUp());
-		}
-	}
-	if (TileToCheck->getTileDown())
-	{
-		if (TileToCheck->getTileDown()->getIsWalkable() && !findElement(TileToCheck->getTileDown()))
-		{
-			TileToCheck->getTileDown()->setGCost(1 + TileToCheck->getGCost());
-			neighboringTiles.push_back(TileToCheck->getTileDown());
-		}
-	}
-	if (TileToCheck->getTileRight())
-	{
-		if (TileToCheck->getTileRight()->getIsWalkable() && !findElement(TileToCheck->getTileRight()))
-		{
-			TileToCheck->getTileRight()->setGCost(1 + TileToCheck->getGCost());
-			neighboringTiles.push_back(TileToCheck->getTileRight());
-		}
-	}
-	if (TileToCheck->getTileLeft())
-	{
-		if (TileToCheck->getTileLeft()->getIsWalkable() && !findElement(TileToCheck->getTileLeft()))
-		{
-			TileToCheck->getTileLeft()->setGCost(1 + TileToCheck->getGCost());
-			neighboringTiles.push_back(TileToCheck->getTileLeft());
+			// If it's not already on the closed list
+			if (!findElementClosedTiles(TileToCheck))
+			{
+				// If it's not already on the open list
+				if (!findElementOpenTiles(TileToCheck))
+				{
+					// Set current tile to be parent and add it to the vector
+					TileToCheck->setParentTile(currentTile);
+					neighboringTiles.push_back(TileToCheck);
+				}
+				else
+				{
+					// Check to see if gCost is less if we use this square to get there.
+					if (TileToCheck->getGCost() >
+						(currentTile->getGCost() + (TileToCheck->getGCost() - TileToCheck->getParentTile()->getGCost())))
+					{
+						// Set current tile to be new parent
+						TileToCheck->setParentTile(currentTile);
+						// Re-calculate costs
+						calculateCosts(TileToCheck, endTile);
+					}
+				}
+			}
 		}
 	}
 }
@@ -164,9 +134,9 @@ int Blinky::getMinfCost()
 {
 	if (openTiles.size())
 	{
-		int minimumfCost = openTiles[0]->getFCost();
+		int minimumfCost = openTiles.back()->getFCost();
 		int index = 0;
-		for (unsigned int i = 0; i < openTiles.size() - 1; ++i)
+		for (unsigned int i = 0; i < openTiles.size(); ++i)
 		{
 			if (openTiles[i]->getFCost() < minimumfCost) 
 			{
@@ -180,41 +150,116 @@ int Blinky::getMinfCost()
 	return 0;
 }
 
-int Blinky::manhattan(std::shared_ptr<Tile> TileToCheck)
+int Blinky::manhattan(std::shared_ptr<Tile> startTile, std::shared_ptr<Tile> endTile)
 {
-	for (auto& tile : map->getAllTiles())
+	float dx = abs(startTile->getPos().x - endTile->getPos().x);
+	float dy = abs(startTile->getPos().y - endTile->getPos().y);
+	return (int)(10 * (dx + dy));
+}
+
+void Blinky::generatePath(std::shared_ptr<Tile> finalTile)
+{
+	clearPathToMoveTiles();
+	bool generatingPath = true;
+	finalTile->setImageGreen();
+	pathToMoveTiles.push_back(finalTile);
+	while (generatingPath)
 	{
-		if (tile->getPacmanIsHere())
+		if (pathToMoveTiles.back().get())
 		{
-			return (int)abs((int)(TileToCheck->getPos().x - tile->getPos().x) + abs(TileToCheck->getPos().y - tile->getPos().y));
+			if (pathToMoveTiles.back()->getParentTile().get())
+			{
+				if (!findElementPathToMoveTiles(pathToMoveTiles.back()->getParentTile()))
+				{
+					pathToMoveTiles.push_back(pathToMoveTiles.back()->getParentTile());
+					pathToMoveTiles.back()->setImageGreen();
+				}
+				else
+				{
+					generatingPath = false;
+				}
+			}
+			else
+			{
+				generatingPath = false;
+			}
+		}
+		else
+		{
+			generatingPath = false;
 		}
 	}
-	return 999;
+	move();
 }
 
-void Blinky::generatePath()
+void Blinky::move()
 {
-	// TODO: ...
+	if (pathToMoveTiles.size())
+	{
+		CurrentTile = pathToMoveTiles.back();
+		pos = CurrentTile->getPos();
+		sprite->setPosition(pos);
+		colBox->setPosition(pos);
+		pathToMoveTiles.back()->setImageOriginal();
+		pathToMoveTiles.pop_back();
+	}
 }
 
-void Blinky::move(std::shared_ptr<Tile> TileToMoveTo)
+void Blinky::calculateCosts(std::shared_ptr<Tile> TileToCalculate, std::shared_ptr<Tile> endTile)
 {
-	// TODO: ...
+	TileToCalculate->setGCost(TileToCalculate->getGCost() + TileToCalculate->getParentTile()->getGCost());
+	TileToCalculate->setHCost(manhattan(TileToCalculate, endTile));
+	TileToCalculate->setFCost(TileToCalculate->getHCost() + TileToCalculate->getGCost());
 }
 
-bool Blinky::findElement(std::shared_ptr<Tile> TileToCheck)
+bool Blinky::findElementClosedTiles(std::shared_ptr<Tile> TileToCheck)
 {
 	std::vector<std::shared_ptr<Tile>>::iterator it;
 	it = find(closedTiles.begin(), closedTiles.end(), TileToCheck);
 	if (it != closedTiles.end())
 	{
-		std::cout << "Found element!\n";
 		return true;
 	}
 	else
 	{
-		std::cout << "Did not find element!\n";
 		return false;
 	}
 
+}
+
+bool Blinky::findElementPathToMoveTiles(std::shared_ptr<Tile> TileToCheck)
+{
+	std::vector<std::shared_ptr<Tile>>::iterator it;
+	it = find(pathToMoveTiles.begin(), pathToMoveTiles.end(), TileToCheck);
+	if (it != pathToMoveTiles.end())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Blinky::findElementOpenTiles(std::shared_ptr<Tile> TileToCheck)
+{
+	std::vector<std::shared_ptr<Tile>>::iterator it;
+	it = find(openTiles.begin(), openTiles.end(), TileToCheck);
+	if (it != openTiles.end())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Blinky::clearPathToMoveTiles()
+{
+	for (auto tile : pathToMoveTiles)
+	{
+		tile->setImageOriginal();
+	}
+	pathToMoveTiles.clear();
 }

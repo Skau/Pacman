@@ -19,7 +19,8 @@ public:
 
 	bool getIsWalkable() { return isWalkable; }
 
-	void ColorSprite();
+	void setImageOriginal();
+	void setImageGreen();
 
 	void setIsTeleporter(bool Value) { isTeleporter = Value; }
 	bool getIsTeleporter() { return isTeleporter; }
@@ -38,9 +39,9 @@ public:
 
 	std::shared_ptr<Tile> getTeleporterTile() { return TeleporterTile; }
 
-	void colorTileRed() { baseSprite->setColor(sf::Color::Red); }
-	void colorTileGreen() { baseSprite->setColor(sf::Color::Green); }
-	void removeColor() { baseSprite->setColor(sf::Color::Transparent); }
+	void setParentTile(std::shared_ptr<Tile> pTile) { ParentTile = pTile; }
+	void resetParentTile() { ParentTile.reset(); }
+	std::shared_ptr<Tile> getParentTile() { return ParentTile; }
 
 	bool getHasDot() { return hasDot; }
 
@@ -82,6 +83,9 @@ private:
 	std::shared_ptr<Tile> TileDown;
 	std::shared_ptr<Tile> TeleporterTile;
 	std::shared_ptr<Tile> ParentTile;
+
+	sf::Image OriginalImage;
+	sf::Image greenImage;
 
 	int tileID;
 	int gCost;

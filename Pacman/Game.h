@@ -11,9 +11,11 @@ public:
 	~Game()=default;
 
 	void init();
+
+	std::shared_ptr<Pacman> getPacman() { return pacman; }
 private:
 	void loadImages();
-	
+	void createPauseText();
 	void beginPlay();
 	void gameLoop();
 	void handleEvents();
@@ -31,7 +33,12 @@ private:
 	std::vector<std::shared_ptr<Entity>> allEntities;
 
 	sf::Clock frameClock;
-	const sf::Time timePerFrame = sf::seconds(1.0f / 60.f);
+	const sf::Time timePerFrame = sf::seconds(1.0f / 15.f);
 	sf::Time timeSinceLastUpdate;
+
+	bool gamePaused;
+
+	std::unique_ptr<sf::Font> font;
+	std::unique_ptr<sf::Text> pauseText;
 };
 

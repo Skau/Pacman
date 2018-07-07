@@ -13,9 +13,15 @@ Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position,
 	baseSprite = std::unique_ptr<sf::Sprite>(new sf::Sprite);
 	baseSprite->setTexture(*baseTexture);
 
-	baseSprite->setOrigin(8, 8);
 	baseSprite->setPosition(Position);
+	baseSprite->setOrigin(8, 8);
 
+	OriginalImage = baseImage;
+
+	if (!greenImage.loadFromFile("images/greenImage.png"))
+	{
+		std::cout << "Failed to load green image!" << std::endl;
+	}
 	pos = Position;
 
 	colBox = std::unique_ptr<sf::RectangleShape>(new sf::RectangleShape());
@@ -55,16 +61,20 @@ void Tile::Draw(sf::RenderWindow & window)
 	window.draw(*dotSprite);
 }
 
-void Tile::ColorSprite()
+void Tile::setImageOriginal()
 {
-	baseSprite->setColor(sf::Color::Red);
+	baseTexture->loadFromImage(OriginalImage);
+}
+
+void Tile::setImageGreen()
+{
+	baseTexture->loadFromImage(greenImage);
 }
 
 void Tile::destroyDot()
 {
 	if (dotSprite)
 	{
-		std::cout << "Ate a dot!\n";
 		dotSprite.release();
 	}
 }

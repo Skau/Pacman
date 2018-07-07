@@ -22,47 +22,67 @@ void Game::init()
 
 	loadImages();
 
+	createPauseText();
+
+	gamePaused = true;
+
 	beginPlay();
 }
 
 void Game::loadImages()
 {
-	sf::Image sprite;
-	if (!sprite.loadFromFile("images/blackImage.png"))
+	sf::Image image;
+	if (!image.loadFromFile("images/blackImage.png"))
 	{
 		std::cout << "Failed to load black image!" << std::endl;
 	}
-	imageManager->addImage(sprite);
-	if (!sprite.loadFromFile("images/blueImage.png"))
+	imageManager->addImage(image);
+	if (!image.loadFromFile("images/blueImage.png"))
 	{
 		std::cout << "Failed to load blue image!" << std::endl;
 	}
-	imageManager->addImage(sprite);
-	if (!sprite.loadFromFile("images/lightBlueImage.png"))
+	imageManager->addImage(image);
+	if (!image.loadFromFile("images/lightBlueImage.png"))
 	{
 		std::cout << "Failed to load lightblue image!" << std::endl;
 	}
-	imageManager->addImage(sprite);
-	if (!sprite.loadFromFile("images/yellowImage.png"))
+	imageManager->addImage(image);
+	if (!image.loadFromFile("images/yellowImage.png"))
 	{
 		std::cout << "Failed to load yellow image!" << std::endl;
 	}
-	imageManager->addImage(sprite);
-	if (!sprite.loadFromFile("images/orangeImage.png"))
+	imageManager->addImage(image);
+	if (!image.loadFromFile("images/orangeImage.png"))
 	{
 		std::cout << "Failed to load orange image!" << std::endl;
 	}
-	imageManager->addImage(sprite);
-	if (!sprite.loadFromFile("images/purpleImage.png"))
+	imageManager->addImage(image);
+	if (!image.loadFromFile("images/purpleImage.png"))
 	{
 		std::cout << "Failed to load purple image!" << std::endl;
 	}
-	imageManager->addImage(sprite);
-	if (!sprite.loadFromFile("images/redImage.png"))
+	imageManager->addImage(image);
+	if (!image.loadFromFile("images/redImage.png"))
 	{
 		std::cout << "Failed to load red image!" << std::endl;
 	}
-	imageManager->addImage(sprite);
+	imageManager->addImage(image);
+}
+
+void Game::createPauseText()
+{
+	font = std::unique_ptr<sf::Font>(new sf::Font);
+	pauseText = std::unique_ptr<sf::Text>(new sf::Text);
+
+	if (!font->loadFromFile("font/arial.ttf"))
+	{
+		std::cout << "Could not load font from file!\n";
+	}
+	pauseText->setFont(*font);
+	pauseText->setString("Press spacebar to resume");
+	pauseText->setOrigin(sf::Vector2f(pauseText->getScale().x / 2, pauseText->getScale().y / 2));
+	pauseText->setPosition(globals::SCREEN_HEIGHT / 16, globals::SCREEN_WIDHT / 26);
+	pauseText->setOutlineThickness(2);
 }
 
 void Game::beginPlay()
@@ -74,9 +94,11 @@ void Game::beginPlay()
 	pacman->setMap(map);
 	allEntities.push_back(pacman);
 
-	allEntities.push_back(std::shared_ptr<Blinky>(new Blinky(imageManager->getImage(6), map->getEnemy1Spawnpoint(), map)));
+	allEntities.push_back(std::shared_ptr<Blinky>(new Blinky(imageManager->getImage(6), map->getEnemy1Spawnpoint(), map, pacman)));
 
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
+	render();
 
 	gameLoop();
 }
@@ -85,10 +107,9 @@ void Game::gameLoop()
 {
 	while (window->isOpen())
 	{
-		timeSinceLastUpdate += frameClock.restart();
-		
 		handleEvents();
 
+		if(!gamePaused)
 		mainTick();
 
 		render();
@@ -104,12 +125,24 @@ void Game::handleEvents()
 		{
 			window->close();
 		}
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
+		{
+			if (!gamePaused)
+				gamePaused = true;
+			else
+			{
+				gamePaused = false;
+				frameClock.restart();
+			}
+		}
+		if(!gamePaused)
 		pacman->handleEvent(event);
 	}
 }
 
 void Game::mainTick()
 {
+	timeSinceLastUpdate += frameClock.restart();
 	while (timeSinceLastUpdate > timePerFrame)
 	{
 		timeSinceLastUpdate -= timePerFrame;
@@ -128,6 +161,9 @@ void Game::render()
 
 	for (auto& entity : allEntities)
 		entity->render(*window);
+
+	if (gamePaused)
+		window->draw(*pauseText);
 
 	window->display();
 }

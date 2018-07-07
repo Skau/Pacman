@@ -28,7 +28,8 @@ void Pacman::handleEvent(sf::Event & event)
 					isMovingLeft = false;
 					break;
 				}
-				case sf::Keyboard::S: {
+				case sf::Keyboard::S: 
+				{
 					isMovingUp = false;
 					isMovingDown = true;
 					isMovingRight = false;
@@ -69,13 +70,10 @@ void Pacman::move(float deltaTime)
 	{
 		if (isMovingUp)
 		{
-			std::cout << "IsMovingUp\n";
-
 			if (CurrentTile->GetTileUp())
 			{
 				if (CurrentTile->GetTileUp()->getIsWalkable() && !CurrentTile->GetTileUp()->getIsPlayerBlock())
 				{
-					std::cout << "Tile " << CurrentTile->GetTileUp()->getTileID() << " is walkable above!\n";
 					pos = CurrentTile->GetTileUp()->getPos();
 					CurrentTile->setPacmanIsHere(false);
 					CurrentTile = CurrentTile->GetTileUp();
@@ -88,13 +86,11 @@ void Pacman::move(float deltaTime)
 				}
 				else
 				{
-					std::cout << "No walkable tile above!\n";
 					isMovingUp = false;
 				}
 			}
 			else
 			{
-				std::cout << "No walkable tile above!\n";
 				isMovingUp = false;
 			}
 		}
@@ -104,7 +100,6 @@ void Pacman::move(float deltaTime)
 			{
 				if (CurrentTile->getTileDown()->getIsWalkable() && !CurrentTile->getTileDown()->getIsPlayerBlock())
 				{
-					std::cout << "Tile " << CurrentTile->getTileDown()->getTileID() << " is walkable below!\n";
 					pos = CurrentTile->getTileDown()->getPos();
 					CurrentTile->setPacmanIsHere(false);
 					CurrentTile = CurrentTile->getTileDown();
@@ -116,13 +111,11 @@ void Pacman::move(float deltaTime)
 				}
 				else
 				{
-					std::cout << "No walkable tile below!\n";
 					isMovingDown = false;
 				}
 			}
 			else
 			{
-				std::cout << "No walkable tile below!\n";
 				isMovingDown = false;
 			}
 		}
@@ -132,7 +125,6 @@ void Pacman::move(float deltaTime)
 			{
 				if (CurrentTile->getTileRight()->getIsTeleporter())
 				{
-					std::cout << "Tile " << CurrentTile->getTileRight()->getTileID() << " is teleporter to the right!\n";
 					if (CurrentTile->getTileRight()->getHasDot())
 					{
 						CurrentTile->destroyDot();
@@ -157,7 +149,6 @@ void Pacman::move(float deltaTime)
 				{
 					if (CurrentTile->getTileRight()->getIsWalkable() && !CurrentTile->getTileRight()->getIsPlayerBlock())
 					{
-						std::cout << "Tile " << CurrentTile->getTileRight()->getTileID() << " is walkable to the right!\n";
 						pos = CurrentTile->getTileRight()->getPos();
 						CurrentTile->setPacmanIsHere(false);
 						CurrentTile = CurrentTile->getTileRight();
@@ -169,14 +160,12 @@ void Pacman::move(float deltaTime)
 					}
 					else
 					{
-						std::cout << "No walkable tile to the right!\n";
 						isMovingRight = false;
 					}
 				}
 			}
 			else
 			{
-				std::cout << "No walkable tile to the right!\n";
 				isMovingRight = false;
 			}
 		}
@@ -186,7 +175,6 @@ void Pacman::move(float deltaTime)
 			{
 				if (CurrentTile->getTileLeft()->getIsTeleporter())
 				{
-					std::cout << "Tile " << CurrentTile->getTileLeft()->getTileID() << " is teleporter to the left!\n";
 					if (CurrentTile->getTileLeft()->getHasDot())
 					{
 						CurrentTile->destroyDot();
@@ -211,7 +199,6 @@ void Pacman::move(float deltaTime)
 				{
 					if (CurrentTile->getTileLeft()->getIsWalkable() && !CurrentTile->getTileLeft()->getIsPlayerBlock())
 					{
-						std::cout << "Tile " << CurrentTile->getTileLeft()->getTileID() << " is walkable to the left!\n";
 						pos = CurrentTile->getTileLeft()->getPos();
 						CurrentTile->setPacmanIsHere(false);
 						CurrentTile = CurrentTile->getTileLeft();
@@ -223,14 +210,12 @@ void Pacman::move(float deltaTime)
 					}
 					else
 					{
-						std::cout << "No walkable tile to the left!\n";
 						isMovingLeft = false;
 					}
 				}
 			}
 			else
 			{
-				std::cout << "No walkable tile to the left!\n";
 				isMovingLeft = false;
 			}
 		}

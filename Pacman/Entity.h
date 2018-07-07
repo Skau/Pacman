@@ -12,6 +12,7 @@ public:
 	virtual void tick(float deltaTime)=0;
 	void render(sf::RenderWindow& renderWindow);
 
+	std::shared_ptr<Tile> getCurrentTile() { return CurrentTile; }
 	void SetIsControllable(bool Value) { isControllable = Value; }
 	
 	sf::Sprite& GetSprite() const { return *sprite; }
