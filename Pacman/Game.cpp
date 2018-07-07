@@ -90,7 +90,7 @@ void Game::createTexts()
 	pauseText->setPosition(5,12);
 	pauseText->setOutlineThickness(2);
 
-	dotsLeft = -2;
+	dotsLeft = 0;
 	dotsText->setFont(*font);
 	dotsText->setString("Dots left: " + std::to_string(dotsLeft));
 	dotsText->setCharacterSize(25);
@@ -204,7 +204,7 @@ void Game::resetGame()
 	}
 	allEntities.clear();
 
-	dotsLeft = -2;
+	dotsLeft = 0;
 	map.reset();
 	init();
 }

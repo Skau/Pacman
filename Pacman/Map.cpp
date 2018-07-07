@@ -16,7 +16,7 @@ void Map::loadMap()
 	picojson::value v;
 
 	// Open and parse the JSON file
-	levelData.open("map/pacmanMap.json");
+	levelData.open("map/testMap4.json");
 	picojson::parse(v, levelData);
 
 	// Total object of the file
@@ -109,7 +109,6 @@ void Map::loadMap()
 				allTiles.push_back(std::shared_ptr<Tile>(new Tile(
 					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f((float)x, (float)y), *game, true, false, false, false, false, id)));
 		}
-
 		std::cout << "Spawning tiles DONE!\n";
 
 		std::cout << "Setting tile pointers!\n";
@@ -141,6 +140,8 @@ void Map::loadMap()
 		}
 		std::cout << "Setting tile pointers DONE!\n";
 	}
+
+	sortTiles();
 }
 
 void Map::drawMap(sf::RenderWindow& window)
@@ -149,5 +150,33 @@ void Map::drawMap(sf::RenderWindow& window)
 	{
 		tile->Draw(window);
 	}
+}
+
+std::shared_ptr<Tile> Map::getTileAtLocation(int x, int y)
+{
+	std::shared_ptr<Tile> tileToReturn;
+
+	tileToReturn = allTiles[(x / 16) * 36 + (y / 16)];
+
+	return tileToReturn;
+}
+
+void Map::sortTiles()
+{
+	std::vector<std::shared_ptr<Tile>> tiles;
+	for (int i = 0; i < 448; i+=16)
+	{
+		for (int j = 0; j < 576; j+=16)
+		{
+			for (auto& tile : allTiles)
+			{
+				if (tile->getPos().x == i && tile->getPos().y == j)
+				{
+					tiles.push_back(tile);
+				}
+			}
+		}
+	}
+	allTiles = tiles;
 }
 
