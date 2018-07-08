@@ -3,7 +3,6 @@
 #include <iostream>
 #include "Globals.h"
 #include "Tile.h"
-#include "Map.h"
 
 Pacman::Pacman(sf::Image & image, std::weak_ptr<Tile> SpawnTile, Game& game) : Entity{ image, SpawnTile, game }
 {
@@ -22,34 +21,26 @@ void Pacman::handleEvent(sf::Event & event)
 				{
 				case sf::Keyboard::W:
 				{
-					isMovingUp = true;
-					isMovingDown = false;
-					isMovingRight = false;
-					isMovingLeft = false;
+					moveDirection = Direction::UP;
+					isMoving = true;
 					break;
 				}
 				case sf::Keyboard::S: 
 				{
-					isMovingUp = false;
-					isMovingDown = true;
-					isMovingRight = false;
-					isMovingLeft = false;
+					moveDirection = Direction::DOWN;
+					isMoving = true;
 					break;
 				}
 				case sf::Keyboard::D:
 				{ 
-					isMovingUp = false;
-					isMovingDown = false;
-					isMovingRight = true;
-					isMovingLeft = false;
+					moveDirection = Direction::RIGHT;
+					isMoving = true;
 					break;
 				}
 				case sf::Keyboard::A:
 				{
-					isMovingUp = false;
-					isMovingDown = false;
-					isMovingRight = false;
-					isMovingLeft = true;
+					moveDirection = Direction::LEFT;
+					isMoving = true;
 					break;
 				}
 				default: break;
@@ -61,6 +52,7 @@ void Pacman::handleEvent(sf::Event & event)
 
 void Pacman::tick(float deltaTime)
 {
+	if(isMoving)
 	move(deltaTime);
 }
 
@@ -68,158 +60,49 @@ void Pacman::move(float deltaTime)
 {
 	if (map)
 	{
-		if (isMovingUp)
-		{
-			if (CurrentTile->GetTileUp())
-			{
-				if (CurrentTile->GetTileUp()->getIsWalkable() && !CurrentTile->GetTileUp()->getIsPlayerBlock())
-				{
-					pos = CurrentTile->GetTileUp()->getPos();
-					CurrentTile->setPacmanIsHere(false);
-					CurrentTile = CurrentTile->GetTileUp();
-					CurrentTile->setPacmanIsHere(true);
-					if (CurrentTile->getHasDot())
-					{
-						CurrentTile->destroyDot();
-					}
+		std::shared_ptr<Tile> tile;
 
-				}
-				else
-				{
-					isMovingUp = false;
-				}
-			}
-			else
-			{
-				isMovingUp = false;
-			}
-		}
-		else if (isMovingDown)
+		tile = map->getTileInDirectionFromLocation(pos, moveDirection);
+		if (tile)
 		{
-			if (CurrentTile->getTileDown())
+			if (tile->getIsWalkable() && !tile->getIsPlayerBlock())
 			{
-				if (CurrentTile->getTileDown()->getIsWalkable() && !CurrentTile->getTileDown()->getIsPlayerBlock())
+				if (tile->getIsTeleporter())
 				{
-					pos = CurrentTile->getTileDown()->getPos();
-					CurrentTile->setPacmanIsHere(false);
-					CurrentTile = CurrentTile->getTileDown();
-					CurrentTile->setPacmanIsHere(true);
-					if (CurrentTile->getHasDot())
+					for (auto& t : map->getAllTiles())
 					{
-						CurrentTile->destroyDot();
-					}
-				}
-				else
-				{
-					isMovingDown = false;
-				}
-			}
-			else
-			{
-				isMovingDown = false;
-			}
-		}
-		else if (isMovingRight)
-		{
-			if (CurrentTile->getTileRight())
-			{
-				if (CurrentTile->getTileRight()->getIsTeleporter())
-				{
-					if (CurrentTile->getTileRight()->getHasDot())
-					{
-						CurrentTile->destroyDot();
-					}
-					for (auto& tile : map->getAllTiles())
-					{
-						if (tile->getIsTeleporter() && tile != CurrentTile->getTileRight())
+						if (t->getIsTeleporter() && t != tile)
 						{
-							pos = tile->getPos();
-							CurrentTile->setPacmanIsHere(false);
-							CurrentTile = tile;
-							CurrentTile->setPacmanIsHere(true);
-							if (CurrentTile->getHasDot())
-							{
-								CurrentTile->destroyDot();
-							}
+
+							CurrentTile = t;
 							break;
 						}
 					}
 				}
 				else
 				{
-					if (CurrentTile->getTileRight()->getIsWalkable() && !CurrentTile->getTileRight()->getIsPlayerBlock())
-					{
-						pos = CurrentTile->getTileRight()->getPos();
-						CurrentTile->setPacmanIsHere(false);
-						CurrentTile = CurrentTile->getTileRight();
-						CurrentTile->setPacmanIsHere(true);
-						if (CurrentTile->getHasDot())
-						{
-							CurrentTile->destroyDot();
-						}
-					}
-					else
-					{
-						isMovingRight = false;
-					}
+					CurrentTile = tile;
+				}
+				pos = CurrentTile->getPos();
+				CurrentTile->setPacmanIsHere(false);
+				CurrentTile->setPacmanIsHere(true);
+				if (CurrentTile->getHasDot())
+				{
+					CurrentTile->destroyDot();
 				}
 			}
 			else
 			{
-				isMovingRight = false;
+				isMoving = false;
 			}
 		}
-		else if (isMovingLeft)
+		else
 		{
-			if (CurrentTile->getTileLeft())
-			{
-				if (CurrentTile->getTileLeft()->getIsTeleporter())
-				{
-					if (CurrentTile->getTileLeft()->getHasDot())
-					{
-						CurrentTile->destroyDot();
-					}
-					for (auto& tile : map->getAllTiles())
-					{
-						if (tile->getIsTeleporter() && tile != CurrentTile->getTileLeft())
-						{
-							pos = tile->getPos();
-							CurrentTile->setPacmanIsHere(false);
-							CurrentTile = tile;
-							CurrentTile->setPacmanIsHere(true);
-							if (CurrentTile->getHasDot())
-							{
-								CurrentTile->destroyDot();
-							}
-							break;
-						}
-					}
-				}
-				else
-				{
-					if (CurrentTile->getTileLeft()->getIsWalkable() && !CurrentTile->getTileLeft()->getIsPlayerBlock())
-					{
-						pos = CurrentTile->getTileLeft()->getPos();
-						CurrentTile->setPacmanIsHere(false);
-						CurrentTile = CurrentTile->getTileLeft();
-						CurrentTile->setPacmanIsHere(true);
-						if (CurrentTile->getTileRight()->getHasDot())
-						{
-							CurrentTile->destroyDot();
-						}
-					}
-					else
-					{
-						isMovingLeft = false;
-					}
-				}
-			}
-			else
-			{
-				isMovingLeft = false;
-			}
+			isMoving = false;
 		}
+
 		sprite->setPosition(pos);
 		colBox->setPosition(pos);
 	}
+	
 }

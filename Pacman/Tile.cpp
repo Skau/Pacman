@@ -77,7 +77,7 @@ void Tile::destroyDot()
 {
 	if (dotSprite)
 	{
-		if (game->dotsLeft)
+		if (game->dotsLeft > 1)
 			game->dotsLeft--;
 		else
 			game->resetGame();

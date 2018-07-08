@@ -113,7 +113,7 @@ void Game::beginPlay()
 	pacman->setMap(map);
 	allEntities.push_back(pacman);
 
-	allEntities.push_back(std::shared_ptr<Blinky>(new Blinky(imageManager->getImage(6), map->getEnemy1Spawnpoint(), map, *this)));
+	allEntities.push_back(std::shared_ptr<Blinky>(new Blinky(imageManager->getImage(6), map->getEnemy1Spawnpoint(), map->getEnemy1ScatterTile(), map, *this)));
 
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 

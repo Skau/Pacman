@@ -35,11 +35,6 @@ public:
 
 	void setTeleporterTile(std::shared_ptr<Tile> TileIn) { TeleporterTile = TileIn; }
 
-	std::shared_ptr<Tile> GetTileUp() { return TileUp; }
-	std::shared_ptr<Tile> getTileLeft() { return TileLeft; }
-	std::shared_ptr<Tile> getTileRight() { return TileRight; }
-	std::shared_ptr<Tile> getTileDown() { return TileDown; }
-
 	std::shared_ptr<Tile> getTeleporterTile() { return TeleporterTile; }
 
 	void setParentTile(std::shared_ptr<Tile> pTile) { ParentTile = pTile; }

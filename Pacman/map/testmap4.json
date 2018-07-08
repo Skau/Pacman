@@ -2,7 +2,7 @@
  "infinite":false,
  "layers":[
         {
-         "data":[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 3, 2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 3, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 3, 2, 2, 3, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 1, 1, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 1, 1, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 2, 3, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 3, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+         "data":[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 3, 2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 3, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 3, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 1, 1, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 1, 1, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 3, 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 2, 3, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 3, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
          "height":36,
          "name":"Tile Layer 1",
          "opacity":1,
@@ -1270,7 +1270,7 @@
                 {
                  "height":16,
                  "id":119,
-                 "name":"",
+                 "name":"Enemy1 Scatter Tile",
                  "properties":
                     {
                      "isWalkable":true
@@ -1280,7 +1280,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"enemy1ScatterTile",
                  "visible":true,
                  "width":16,
                  "x":384,
@@ -5625,7 +5625,7 @@
                 {
                  "height":16,
                  "id":371,
-                 "name":"EnemySpawn3",
+                 "name":"Enemy Spawn 3",
                  "properties":
                     {
                      "isWalkable":true
@@ -5638,51 +5638,13 @@
                  "type":"enemySpawnTile3",
                  "visible":true,
                  "width":16,
-                 "x":192,
-                 "y":256
-                }, 
-                {
-                 "height":16,
-                 "id":372,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
                  "x":208,
-                 "y":256
-                }, 
-                {
-                 "height":16,
-                 "id":373,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":224,
-                 "y":256
+                 "y":256.125
                 }, 
                 {
                  "height":16,
                  "id":374,
-                 "name":"EnemySpawn4",
+                 "name":"Enemy Spawn 4",
                  "properties":
                     {
                      "isWalkable":true
@@ -5695,89 +5657,13 @@
                  "type":"enemySpawnTile4",
                  "visible":true,
                  "width":16,
-                 "x":240,
+                 "x":224,
                  "y":256
                 }, 
                 {
                  "height":16,
-                 "id":375,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":240,
-                 "y":272
-                }, 
-                {
-                 "height":16,
-                 "id":376,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":224,
-                 "y":272
-                }, 
-                {
-                 "height":16,
-                 "id":377,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":208,
-                 "y":272
-                }, 
-                {
-                 "height":16,
-                 "id":378,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":192,
-                 "y":272
-                }, 
-                {
-                 "height":16,
                  "id":379,
-                 "name":"EnemySpawn1",
+                 "name":"Enemy Spawn 1",
                  "properties":
                     {
                      "isWalkable":true
@@ -5790,51 +5676,13 @@
                  "type":"enemySpawnTile1",
                  "visible":true,
                  "width":16,
-                 "x":192,
-                 "y":288
-                }, 
-                {
-                 "height":16,
-                 "id":380,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
                  "x":208,
-                 "y":288
-                }, 
-                {
-                 "height":16,
-                 "id":381,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":224,
-                 "y":288
+                 "y":240
                 }, 
                 {
                  "height":16,
                  "id":382,
-                 "name":"EnemySpawn2",
+                 "name":"Enemy Spawn 2",
                  "properties":
                     {
                      "isWalkable":true
@@ -5847,160 +5695,8 @@
                  "type":"enemySpawnTile2",
                  "visible":true,
                  "width":16,
-                 "x":240,
-                 "y":288
-                }, 
-                {
-                 "height":16,
-                 "id":383,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"playerBlock",
-                 "visible":true,
-                 "width":16,
-                 "x":208,
-                 "y":240
-                }, 
-                {
-                 "height":16,
-                 "id":384,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"playerBlock",
-                 "visible":true,
-                 "width":16,
                  "x":224,
                  "y":240
-                }, 
-                {
-                 "height":16,
-                 "id":385,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":256,
-                 "y":256
-                }, 
-                {
-                 "height":16,
-                 "id":386,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":256,
-                 "y":272
-                }, 
-                {
-                 "height":16,
-                 "id":387,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":256,
-                 "y":288
-                }, 
-                {
-                 "height":16,
-                 "id":388,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":176,
-                 "y":288
-                }, 
-                {
-                 "height":16,
-                 "id":389,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":176,
-                 "y":272
-                }, 
-                {
-                 "height":16,
-                 "id":390,
-                 "name":"",
-                 "properties":
-                    {
-                     "isWalkable":true
-                    },
-                 "propertytypes":
-                    {
-                     "isWalkable":"bool"
-                    },
-                 "rotation":0,
-                 "type":"enemySpawnTile",
-                 "visible":true,
-                 "width":16,
-                 "x":176,
-                 "y":256
                 }, 
                 {
                  "height":16,
@@ -13723,6 +13419,182 @@
                  "width":16,
                  "x":272,
                  "y":240
+                }, 
+                {
+                 "height":16,
+                 "id":1135,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":240,
+                 "y":256
+                }, 
+                {
+                 "height":16,
+                 "id":1136,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":256,
+                 "y":256
+                }, 
+                {
+                 "height":16,
+                 "id":1137,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":240,
+                 "y":272
+                }, 
+                {
+                 "height":16,
+                 "id":1138,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":256,
+                 "y":272
+                }, 
+                {
+                 "height":16,
+                 "id":1139,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":240,
+                 "y":288
+                }, 
+                {
+                 "height":16,
+                 "id":1140,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":256,
+                 "y":288
+                }, 
+                {
+                 "height":16,
+                 "id":1141,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":224,
+                 "y":288
+                }, 
+                {
+                 "height":16,
+                 "id":1142,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":208,
+                 "y":288
+                }, 
+                {
+                 "height":16,
+                 "id":1143,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":176,
+                 "y":256
+                }, 
+                {
+                 "height":16,
+                 "id":1144,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":192,
+                 "y":256
+                }, 
+                {
+                 "height":16,
+                 "id":1145,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":176,
+                 "y":272
+                }, 
+                {
+                 "height":16,
+                 "id":1146,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":192,
+                 "y":272
+                }, 
+                {
+                 "height":16,
+                 "id":1147,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":176,
+                 "y":288
+                }, 
+                {
+                 "height":16,
+                 "id":1148,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":192,
+                 "y":288
+                }, 
+                {
+                 "height":16,
+                 "id":1150,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":224,
+                 "y":272
+                }, 
+                {
+                 "height":16,
+                 "id":1151,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collisionTile",
+                 "visible":true,
+                 "width":16,
+                 "x":208,
+                 "y":272
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -13730,7 +13602,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":1134,
+ "nextobjectid":1153,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.5",

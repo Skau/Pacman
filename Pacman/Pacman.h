@@ -1,6 +1,6 @@
 #pragma once
 #include "Entity.h"
-
+#include "Map.h"
 class Map;
 class Tile;
 
@@ -16,15 +16,14 @@ public:
 
 	void setMap(std::shared_ptr<Map> CurrentMap) { map = CurrentMap; }
 
+	Direction moveDirection;
+
 	void move(float deltaTime);
 
 	std::shared_ptr<Map> map;
 	std::shared_ptr<Tile> LeftTeleporter;
 	std::shared_ptr<Tile> RightTeleporter;
 
-	bool isMovingUp;
-	bool isMovingDown;
-	bool isMovingLeft;
-	bool isMovingRight;
+	bool isMoving;
 };
 

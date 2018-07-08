@@ -4,6 +4,7 @@ class Entity;
 class Tile;
 class ImageManager;
 class Map;
+
 class Game
 {
 public:
