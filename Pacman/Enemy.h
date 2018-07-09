@@ -22,7 +22,8 @@ public:
 protected:
 	void tick(float deltaTime);
 
-	void Chase();
+	virtual void Chase()=0;
+	virtual void childTick() = 0;
 
 	void Scatter();
 
@@ -32,35 +33,37 @@ protected:
 
 	std::shared_ptr<Tile> EndTile;
 
-	void findAdjacentTiles(std::shared_ptr<Tile> currentTile, std::shared_ptr<Tile> TileToCheck, std::shared_ptr<Tile> endTile);
+	void findAdjacentTiles(std::shared_ptr<Tile> currentTile, std::shared_ptr<Tile> endTile);
 
 	int getMinfCost();
 
 	int manhattan(std::shared_ptr<Tile> startTile, std::shared_ptr<Tile> endTile);
 
+	int manhattan(sf::Vector2f startPos, sf::Vector2f endPos);
+
 	void generatePath(std::shared_ptr<Tile> finalTile);
 
 	void move();
 
-	void findPathToNextIntersection(sf::Vector2f startLocation);
+	sf::Vector2f findRandomIntersection();
 
 	void calculateCosts(std::shared_ptr<Tile> TileToCalculate, std::shared_ptr<Tile> endTile);
 
 	bool findTileInVector(std::shared_ptr<Tile> TileToCheck, std::vector<std::shared_ptr<Tile>>& VectorToCheck);
 
-	void clearPathToMoveTiles();
+	void clearAndResetImageOnPathToMove();
 
 	bool canMove;
 
 	bool foundPathToScatterTile;
 
-	Direction calculateDirection(std::shared_ptr<Tile> nextTile);
-
-	std::vector<Direction> possibleDirections();
-
 	State state;
 
-	Direction lastDirection;
+	std::vector<sf::Time> timeBetweenStates;
+
+	sf::Clock clock;
+
+	sf::Vector2f bannedPos;
 
 	std::shared_ptr<Pacman> pacman;
 
@@ -70,7 +73,8 @@ protected:
 
 	std::vector<std::shared_ptr<Tile>> openTiles;
 	std::vector<std::shared_ptr<Tile>> closedTiles;
-	std::vector<std::shared_ptr<Tile>> adjacentTIles;
+	std::vector<std::shared_ptr<Tile>> adjacentTiles;
 	std::vector<std::shared_ptr<Tile>> pathToMoveTiles;
+	std::vector<Direction> directions;
 };
 

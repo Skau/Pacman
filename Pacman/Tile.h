@@ -28,11 +28,6 @@ public:
 	void setIsTeleporter(bool Value) { isTeleporter = Value; }
 	bool getIsTeleporter() { return isTeleporter; }
 
-	void setTileUp(std::shared_ptr<Tile> TileIn) { TileUp = TileIn; }
-	void setTileLeft(std::shared_ptr<Tile> TileIn) { TileLeft = TileIn; }
-	void setTileRight(std::shared_ptr<Tile> TileIn) { TileRight = TileIn; }
-	void setTileDown(std::shared_ptr<Tile> TileIn) { TileDown = TileIn; }
-
 	void setTeleporterTile(std::shared_ptr<Tile> TileIn) { TeleporterTile = TileIn; }
 
 	std::shared_ptr<Tile> getTeleporterTile() { return TeleporterTile; }
@@ -77,10 +72,6 @@ private:
 
 	Game* game;
 
-	std::shared_ptr<Tile> TileUp;
-	std::shared_ptr<Tile> TileLeft;
-	std::shared_ptr<Tile> TileRight;
-	std::shared_ptr<Tile> TileDown;
 	std::shared_ptr<Tile> TeleporterTile;
 	std::shared_ptr<Tile> ParentTile;
 

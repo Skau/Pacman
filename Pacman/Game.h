@@ -1,5 +1,8 @@
 #pragma once
 class Pacman;
+class Blinky;
+class Pinky;
+class Inky;
 class Entity;
 class Tile;
 class ImageManager;
@@ -16,6 +19,9 @@ public:
 	void resetGame();
 
 	std::shared_ptr<Pacman> getPacman() { return pacman; }
+	std::shared_ptr<Blinky> getBlinky() { return blinky; }
+	std::shared_ptr<Pinky> getPinky() { return pinky; }
+	std::shared_ptr<Inky> getInky() { return inky; }
 
 	int dotsLeft;
 
@@ -35,6 +41,9 @@ private:
 	std::shared_ptr<Map> map;
 
 	std::shared_ptr<Pacman> pacman;
+	std::shared_ptr<Blinky> blinky;
+	std::shared_ptr<Pinky> pinky;
+	std::shared_ptr<Inky> inky;
 
 	std::vector<std::shared_ptr<Entity>> allEntities;
 

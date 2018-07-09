@@ -6,7 +6,8 @@
 #include "Entity.h"
 #include "Pacman.h"
 #include "Blinky.h"
-#include "picojson.h"
+#include "Pinky.h"
+#include "Inky.h"
 #include "ImageManager.h"
 #include "Tile.h"
 #include "Map.h"
@@ -17,7 +18,7 @@ Game::Game()
 	window->setFramerateLimit(120);
 	window->setKeyRepeatEnabled(true);
 
-	imageManager = std::shared_ptr<ImageManager>(new ImageManager());
+	imageManager = std::make_shared<ImageManager>(ImageManager());
 
 	loadImages();
 
@@ -26,7 +27,7 @@ Game::Game()
 
 void Game::init()
 {
-	map = std::shared_ptr<Map>(new Map(imageManager, *this));
+	map = std::make_shared<Map>(imageManager, *this);
 
 	gamePaused = true;
 
@@ -71,14 +72,19 @@ void Game::loadImages()
 		std::cout << "Failed to load red image!" << std::endl;
 	}
 	imageManager->addImage(image);
+	if (!image.loadFromFile("images/pinkImage.png"))
+	{
+		std::cout << "Failed to load red image!" << std::endl;
+	}
+	imageManager->addImage(image);
 }
 
 void Game::createTexts()
 {
-	font = std::unique_ptr<sf::Font>(new sf::Font);
-	pauseText = std::unique_ptr<sf::Text>(new sf::Text);
-	dotsText = std::unique_ptr<sf::Text>(new sf::Text);
-	resetText = std::unique_ptr<sf::Text>(new sf::Text);
+	font = std::make_unique<sf::Font>(sf::Font());
+	pauseText = std::make_unique<sf::Text>(sf::Text());
+	dotsText = std::make_unique<sf::Text>(sf::Text());
+	resetText = std::make_unique<sf::Text>(sf::Text());
 
 	if (!font->loadFromFile("font/arial.ttf"))
 	{
@@ -108,12 +114,17 @@ void Game::beginPlay()
 {
 	map->loadMap();
 
-	pacman = std::shared_ptr<Pacman>(new Pacman(imageManager->getImage(3), map->getPlayerSpawnTile(), *this));
+	pacman = std::make_shared<Pacman>(imageManager->getImage(3), map->getPlayerSpawnTile(), *this);
     pacman->SetIsControllable(true);
 	pacman->setMap(map);
 	allEntities.push_back(pacman);
 
-	allEntities.push_back(std::shared_ptr<Blinky>(new Blinky(imageManager->getImage(6), map->getEnemy1Spawnpoint(), map->getEnemy1ScatterTile(), map, *this)));
+	blinky = std::make_shared<Blinky>(imageManager->getImage(6), map->getEnemy1Spawnpoint(), map->getEnemy1ScatterTile(), map, *this);
+	allEntities.push_back(blinky);
+	pinky = std::make_shared<Pinky>(imageManager->getImage(7), map->getEnemy2Spawnpoint(), map->getEnemy2ScatterTile(), map, *this);
+	allEntities.push_back(pinky);
+	inky = std::make_shared<Inky>(imageManager->getImage(2), map->getEnemy3Spawnpoint(), map->getEnemy3ScatterTile(), map, *this);
+	allEntities.push_back(inky);
 
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 

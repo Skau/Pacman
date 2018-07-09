@@ -136,9 +136,11 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="ImageManager.cpp" />
+    <ClCompile Include="Inky.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pacman.cpp" />
+    <ClCompile Include="Pinky.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,9 +150,11 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="ImageManager.h" />
+    <ClInclude Include="Inky.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Pacman.h" />
     <ClInclude Include="picojson.h" />
+    <ClInclude Include="Pinky.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

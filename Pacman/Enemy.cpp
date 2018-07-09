@@ -14,19 +14,45 @@ Enemy::Enemy(sf::Image & image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Til
 	srand((int)time(NULL));
 
 	auto st = scatterTileIn.lock();
-	if (st)
+	if (st.get())
 	{
 		scatterTile = st;
 	}
-	lastDirection = Direction::DOWN;
-	state = State::CHASE;
 	pacman = game.getPacman();
+	if(EndTile.get())
 	EndTile = pacman->getCurrentTile();
 	canMove = true;
+
+	state = State::SCATTER;
+	timeBetweenStates.push_back(sf::Time(sf::seconds(2000)));
+	timeBetweenStates.push_back(sf::Time(sf::seconds(20)));
+	timeBetweenStates.push_back(sf::Time(sf::seconds(7)));
+	timeBetweenStates.push_back(sf::Time(sf::seconds(20)));
+	timeBetweenStates.push_back(sf::Time(sf::seconds(7)));
+
+	directions.push_back(Direction::UP);
+	directions.push_back(Direction::DOWN);
+	directions.push_back(Direction::LEFT);
+	directions.push_back(Direction::RIGHT);
 }
 
 void Enemy::tick(float deltaTime)
 {
+	if (timeBetweenStates.size())
+	{
+		if (clock.getElapsedTime() > timeBetweenStates.back())
+		{
+			if (state == State::CHASE)
+				state = State::SCATTER;
+			else
+				state = State::CHASE;
+			timeBetweenStates.pop_back();
+			clock.restart();
+		}
+	}
+
+	if(pacman->getCurrentTile().get())
+	EndTile = pacman->getCurrentTile();
 	switch (state)
 	{
 	case State::CHASE:
@@ -41,72 +67,32 @@ void Enemy::tick(float deltaTime)
 	default:
 		break;
 	}
-}
 
-void Enemy::Chase()
-{
-	std::shared_ptr<Tile> eTile = pacman->getCurrentTile();
-
-	if (EndTile.get() && CurrentTile->getPos() != pacman->getPos())
-	{
-		if (eTile->getPos() != EndTile->getPos())
-		{
-			if (pathToMoveTiles.size())
-			{
-				if (750 > manhattan(pathToMoveTiles[0], eTile))
-				{
-					move();
-				}
-				else
-				{
-					EndTile = pacman->getCurrentTile();
-					findPath(CurrentTile->getPos(), EndTile->getPos());
-				}
-			}
-			else
-			{
-				EndTile = pacman->getCurrentTile();
-				findPath(CurrentTile->getPos(), EndTile->getPos());
-			}
-		}
-		else
-		{
-			if (pathToMoveTiles.size())
-			{
-				move();
-			}
-			else
-			{
-				EndTile = pacman->getCurrentTile();
-				findPath(CurrentTile->getPos(), EndTile->getPos());
-			}
-		}
-	}
-	else
-	{
-		game->resetGame();
-	}
+	childTick();
 }
 
 void Enemy::Scatter()
 {
-	if (scatterTile)
+	if (pos == pacman->getPos()) game->resetGame();
+
+	if (scatterTile.get())
 	{
-		if (pos != scatterTile->getPos())
+		if (!pathToMoveTiles.size())
 		{
-			if (!foundPathToScatterTile)
-			{
-				findPath(pos, scatterTile->getPos());
-				foundPathToScatterTile = true;
-			}
-			else
-			{
-				move();
-			}
+			std::cout << "DONE! CurrentTile( " << CurrentTile->getPos().x << ", " << CurrentTile->getPos().y << std::endl;
+			findPath(pos, sf::Vector2f(208,240));
+			foundPathToScatterTile = false;
+		}
+
+		if (!foundPathToScatterTile)
+		{
+			findPath(pos, scatterTile->getPos());
+			foundPathToScatterTile = true;
+			std::cout << pathToMoveTiles.size() << std::endl;
 		}
 		else
 		{
-			state = State::CHASE;
+			move();
 		}
 	}
 	else
@@ -117,92 +103,151 @@ void Enemy::Scatter()
 
 void Enemy::Ghost()
 {
+	if (!pathToMoveTiles.size())
+	{
+		findPath(pos, findRandomIntersection());
+	}
+	else
+	{
+		move();
+	}
 }
 
 void Enemy::findPath(sf::Vector2f startLocation, sf::Vector2f endLocation)
 {
+	clearAndResetImageOnPathToMove();
 	if (openTiles.size()) openTiles.clear();
 	if (closedTiles.size()) closedTiles.clear();
 
 	// Setup starting tile (current location)
-	auto startTile = map->getTileAtLocation(startLocation);
-	auto endTile = map->getTileAtLocation(endLocation);
-	startTile->setHCost(manhattan(startTile, endTile));
-	startTile->setFCost(0 + startTile->getHCost());
-	openTiles.push_back(startTile);
-
-	while (openTiles.size() != 0)
+	if (map->checkIfAdjacentTileIsInOfRange(startLocation, Direction::DEFAULT) && map->checkIfAdjacentTileIsInOfRange(endLocation, Direction::DEFAULT))
 	{
-		// Get the tile with lowest F cost from open tiles
-		std::shared_ptr<Tile> currentTile = openTiles[getMinfCost()];
-
-		// remove it from open tiles and add it to close tiles
-		openTiles.erase(std::remove(openTiles.begin(), openTiles.end(), currentTile), openTiles.end());
-		closedTiles.push_back(currentTile);
-
-		// Increment G cost
-		currentTile->setGCost(currentTile->getGCost() + 1);
-
-		// If this tile is the end tile, generate the path to get there
-		if (currentTile->getPos() == endTile->getPos())
+		std::shared_ptr<Tile> startTile = map->getTileAtLocation(startLocation);
+		std::shared_ptr<Tile> endTile = map->getTileAtLocation(endLocation);
+		if (startTile.get() && endTile.get())
 		{
-			generatePath(currentTile);
-			break;
-		}
+			// calculate cost of starting tile
+			startTile->setHCost(manhattan(startTile, endTile));
+			startTile->setFCost(0 + startTile->getHCost());
+			openTiles.push_back(startTile);
 
-		// Find adjacent tiles
-		if (adjacentTIles.size()) adjacentTIles.clear();
+			// Loop while there are still tiles available to check
+			while (openTiles.size() != 0)
+			{
+				// Get the tile with lowest F cost from open tiles
+				std::shared_ptr<Tile> currentTile = openTiles[getMinfCost()];
 
-		findAdjacentTiles(currentTile, map->getTileInDirectionFromLocation(currentTile->getPos(), Direction::UP), endTile);
-		findAdjacentTiles(currentTile, map->getTileInDirectionFromLocation(currentTile->getPos(), Direction::DOWN), endTile);
-		findAdjacentTiles(currentTile, map->getTileInDirectionFromLocation(currentTile->getPos(), Direction::LEFT), endTile);
-		findAdjacentTiles(currentTile, map->getTileInDirectionFromLocation(currentTile->getPos(), Direction::RIGHT), endTile);
-		
+				if (currentTile.get())
+				{
+					// remove it from open tiles and add it to close tiles
+					openTiles.erase(std::remove(openTiles.begin(), openTiles.end(), currentTile), openTiles.end());
+					closedTiles.push_back(currentTile);
 
-		// Calculate the costs of valid adjacent tiles and add them to the open list
-		for (int i = 0; i < adjacentTIles.size(); ++i)
-		{
-			calculateCosts(adjacentTIles[i], endTile);
-			openTiles.push_back(adjacentTIles[i]);
+					// Increment G cost
+					currentTile->setGCost(currentTile->getGCost() + 1);
+
+					// If this tile is the end tile, generate the path to get there
+					if (currentTile->getPos() == endTile->getPos())
+					{
+						generatePath(currentTile);
+						break;
+					}
+					findAdjacentTiles(currentTile, endTile);
+				}
+			}
 		}
 	}
 }
 
-void Enemy::findAdjacentTiles(std::shared_ptr<Tile> currentTile, std::shared_ptr<Tile> TileToCheck, std::shared_ptr<Tile> endTile)
+void Enemy::findAdjacentTiles(std::shared_ptr<Tile> currentTile, std::shared_ptr<Tile> endTile)
 {
-	// Check to see if the neighbor exists
-	if (TileToCheck)
+	std::vector<std::shared_ptr<Tile>> tilesToCheck;
+	if (currentTile.get() && endTile.get())
 	{
-		//if (TileToCheck->getPos() != map->getTileInDirectionFromLocation(currentTile->getPos(), lastDirection)->getPos())
-		//{
-			// Check to see if it's possible to move there
-		if (TileToCheck->getIsWalkable())
+		if (adjacentTiles.size()) adjacentTiles.clear();
+
+		for (auto direction : directions)
 		{
-			// If it's not already on the closed list
-			if (!findTileInVector(TileToCheck, closedTiles))
+			if (map->checkIfAdjacentTileIsInOfRange(currentTile->getPos(), direction))
 			{
-				// If it's not already on the open list
-				if (!findTileInVector(TileToCheck, openTiles))
+				std::shared_ptr<Tile> tileToCheck = map->getTileInDirectionFromLocation(currentTile->getPos(), direction);
+				if (tileToCheck.get())
 				{
-					// Set current tile to be parent and add it to the vector
-					TileToCheck->setParentTile(currentTile);
-					adjacentTIles.push_back(TileToCheck);
-				}
-				else
-				{
-					// Check to see if gCost is less if we use this square to get there.
-					if (TileToCheck->getGCost() >
-						(currentTile->getGCost() + (TileToCheck->getGCost() - TileToCheck->getParentTile()->getGCost())))
+					if (direction == Direction::LEFT || direction == Direction::RIGHT)
 					{
-						// Set current tile to be new parent
-						TileToCheck->setParentTile(currentTile);
-						// Re-calculate costs
-						calculateCosts(TileToCheck, endTile);
+						if (tileToCheck->getIsTeleporter())
+						{
+							for (auto tile : map->getAllTiles())
+							{
+								if (tile.get())
+								{
+									if (tile->getIsTeleporter() && tile != tileToCheck)
+									{
+										tilesToCheck.push_back(tile);
+									}
+								}
+							}
+						}
+						else
+						{
+							tilesToCheck.push_back(tileToCheck);
+						}
+					}
+					else
+					{
+						tilesToCheck.push_back(tileToCheck);
 					}
 				}
 			}
 		}
-		//}
+	}
+	
+	for (auto tile : tilesToCheck)
+	{
+		// Check to see if the neighbor exists
+		if (tile.get())
+		{
+			if (tile->getPos() != bannedPos)
+			{
+				// Check to see if it's possible to move there
+				if (tile->getIsWalkable())
+				{
+					if (tile->getPos() != pos)
+					{
+						// If it's not already on the closed list
+						if (!findTileInVector(tile, closedTiles))
+						{
+							// If it's not already on the open list
+							if (!findTileInVector(tile, openTiles))
+							{
+								// Set current tile to be parent and add it to the vector
+								tile->setParentTile(currentTile);
+								adjacentTiles.push_back(tile);
+							}
+							else
+							{
+								// Check to see if gCost is less if we use this square to get there.
+								if (tile->getGCost() >
+									(currentTile->getGCost() + (tile->getGCost() - tile->getParentTile()->getGCost())))
+								{
+									// Set current tile to be new parent
+									tile->setParentTile(currentTile);
+									// Re-calculate costs
+									calculateCosts(tile, endTile);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Calculate costs and add tiles to openTiles
+	for (auto tile : adjacentTiles)
+	{
+		calculateCosts(tile, endTile);
+		openTiles.push_back(tile);
 	}
 }
 
@@ -230,29 +275,48 @@ int Enemy::getMinfCost()
 // Heuristic
 int Enemy::manhattan(std::shared_ptr<Tile> startTile, std::shared_ptr<Tile> endTile)
 {
-	float dx = abs(startTile->getPos().x - endTile->getPos().x);
-	float dy = abs(startTile->getPos().y - endTile->getPos().y);
+	int v = 9999;
+	if (startTile.get() && endTile.get())
+	{
+		float dx = abs(startTile->getPos().x - endTile->getPos().x);
+		float dy = abs(startTile->getPos().y - endTile->getPos().y);
+		v = (int)(10 * (dx + dy));
+	}
+	return v;
+}
+
+int Enemy::manhattan(sf::Vector2f startPos, sf::Vector2f endPos)
+{
+	float dx = abs(startPos.x - endPos.x);
+	float dy = abs(startPos.y - endPos.y);
 	return (int)(10 * (dx + dy));
 }
 
 // Generate the path to the end tile
 void Enemy::generatePath(std::shared_ptr<Tile> finalTile)
 {
-	clearPathToMoveTiles();
-	bool generatingPath = true;
-
-	pathToMoveTiles.push_back(finalTile);
-
-	while (generatingPath)
+	if (finalTile.get())
 	{
-		if (pathToMoveTiles.back().get())
+		if (pathToMoveTiles.size()) pathToMoveTiles.clear();
+		bool generatingPath = true;
+
+		pathToMoveTiles.push_back(finalTile);
+
+		while (generatingPath)
 		{
-			if (pathToMoveTiles.back()->getParentTile().get())
+			if (pathToMoveTiles.back().get())
 			{
-				if (!findTileInVector(pathToMoveTiles.back()->getParentTile(), pathToMoveTiles) && pathToMoveTiles.back()->getParentTile()->getPos() != CurrentTile->getPos())
+				if (pathToMoveTiles.back()->getParentTile().get())
 				{
-					pathToMoveTiles.push_back(pathToMoveTiles.back()->getParentTile());
-					pathToMoveTiles.back()->setImageGreen();
+					if (!findTileInVector(pathToMoveTiles.back()->getParentTile(), pathToMoveTiles) && pathToMoveTiles.back()->getParentTile()->getPos() != CurrentTile->getPos())
+					{
+						pathToMoveTiles.push_back(pathToMoveTiles.back()->getParentTile());
+						pathToMoveTiles.back()->setImageGreen();
+					}
+					else
+					{
+						generatingPath = false;
+					}
 				}
 				else
 				{
@@ -264,10 +328,6 @@ void Enemy::generatePath(std::shared_ptr<Tile> finalTile)
 				generatingPath = false;
 			}
 		}
-		else
-		{
-			generatingPath = false;
-		}
 	}
 
 	move();
@@ -278,34 +338,38 @@ void Enemy::move()
 	// Bool is there to half the movement speed
 	if (pathToMoveTiles.size() && canMove)
 	{
-		lastDirection = calculateDirection(pathToMoveTiles.back());
-		CurrentTile = pathToMoveTiles.back();
-		pos = CurrentTile->getPos();
-		sprite->setPosition(pos);
-		colBox->setPosition(pos);
-		pathToMoveTiles.back()->setImageOriginal();
-		pathToMoveTiles.pop_back();
+		bannedPos = CurrentTile->getPos();
+		if (pathToMoveTiles.back().get())
+		{
+			CurrentTile = pathToMoveTiles.back();
+			pos = CurrentTile->getPos();
+			sprite->setPosition(pos);
+			colBox->setPosition(pos);
+			pathToMoveTiles.back()->setImageOriginal();
+			pathToMoveTiles.pop_back();
+		}
+	}
+	else if (!pathToMoveTiles.size() && foundPathToScatterTile)
+	{
+		foundPathToScatterTile = false;
 	}
 	canMove = !canMove;
 }
 
-void Enemy::findPathToNextIntersection(sf::Vector2f startLocation)
+sf::Vector2f Enemy::findRandomIntersection()
 {
-	switch (lastDirection)
+	std::vector<std::shared_ptr<Tile>> intersections;
+	for (auto tile : map->getAllTiles())
 	{
-	case Direction::UP:
-		break;
-	case Direction::DOWN:
-		break;
-	case Direction::LEFT:
-		break;
-	case Direction::RIGHT:
-		break;
-	case Direction::DEFAULT:
-		break;
-	default:
-		break;
+		if (tile->getIsIntersection())
+		{
+			intersections.push_back(tile);
+		}
 	}
+
+	int i = rand() & intersections.size();
+
+	return intersections[i]->getPos();
 }
 
 // Set the G, H and F costs of a tile
@@ -330,70 +394,12 @@ bool Enemy::findTileInVector(std::shared_ptr<Tile> TileToCheck, std::vector<std:
 	}
 }
 
-void Enemy::clearPathToMoveTiles()
+void Enemy::clearAndResetImageOnPathToMove()
 {
 	for (auto tile : pathToMoveTiles)
 	{
+		if(tile.get())
 		tile->setImageOriginal();
 	}
 	pathToMoveTiles.clear();
-}
-
-Direction Enemy::calculateDirection(std::shared_ptr<Tile> nextTile)
-{
-	if (nextTile->getPos().x < CurrentTile->getPos().x) return Direction::LEFT;
-	if (nextTile->getPos().x > CurrentTile->getPos().x) return Direction::RIGHT;
-	if (nextTile->getPos().y < CurrentTile->getPos().y) return Direction::UP;
-	if (nextTile->getPos().y > CurrentTile->getPos().y) return Direction::DOWN;
-	return Direction::DEFAULT;
-}
-
-std::vector<Direction> Enemy::possibleDirections()
-{
-	std::vector<Direction> directions;
-	switch (lastDirection)
-	{
-	case Direction::UP:
-	{
-		directions.push_back(Direction::DOWN);
-		directions.push_back(Direction::LEFT);
-		directions.push_back(Direction::RIGHT);
-		break;
-	}
-	case Direction::DOWN:
-	{
-		directions.push_back(Direction::UP);
-		directions.push_back(Direction::LEFT);
-		directions.push_back(Direction::RIGHT);
-
-		break;
-	}
-	case Direction::LEFT:
-	{
-		directions.push_back(Direction::UP);
-		directions.push_back(Direction::DOWN);
-		directions.push_back(Direction::RIGHT);
-
-		break;
-	}
-	case Direction::RIGHT:
-	{
-		directions.push_back(Direction::UP);
-		directions.push_back(Direction::DOWN);
-		directions.push_back(Direction::LEFT);
-
-		break;
-	}
-	case Direction::DEFAULT:
-	{
-		directions.push_back(Direction::UP);
-		directions.push_back(Direction::DOWN);
-		directions.push_back(Direction::RIGHT);
-		directions.push_back(Direction::LEFT);
-		break;
-	}
-	default:
-		break;
-	}
-	return directions;
 }

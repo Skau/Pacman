@@ -22,6 +22,8 @@ public:
 
 	void drawMap(sf::RenderWindow& window);
 
+	bool checkIfAdjacentTileIsInOfRange(sf::Vector2f currentLoc, Direction dir);
+
 	std::shared_ptr<Tile> getPlayerSpawnTile() { return playerSpawnPoint; }
 	std::shared_ptr<Tile> getEnemy1Spawnpoint() { return enemy1Spawnpoint; }
 	std::shared_ptr<Tile> getEnemy2Spawnpoint() { return enemy2Spawnpoint; }
@@ -33,7 +35,7 @@ public:
 	std::shared_ptr<Tile> getEnemy3ScatterTile() { return enemy3ScatterTile; }
 	std::shared_ptr<Tile> getEnemy4ScatterTile() { return enemy4ScatterTile; }
 
-	std::vector<std::shared_ptr<Tile>>& getAllTiles() { return allTiles; }
+	std::vector<std::shared_ptr<Tile>> getAllTiles() { return allTiles; }
 
 	std::shared_ptr<Tile> getTileAtLocation(sf::Vector2f location);
 	std::shared_ptr<Tile> getTileInDirectionFromLocation(sf::Vector2f location, Direction dir);

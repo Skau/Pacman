@@ -7,9 +7,9 @@
 
 Entity::Entity(sf::Image& image, std::weak_ptr<Tile> SpawnTile, Game& g) : pos{0,0}, vel{0,0}, game{ &g }
 {
-	texture = std::unique_ptr<sf::Texture>(new sf::Texture);
-	sprite = std::unique_ptr<sf::Sprite>(new sf::Sprite);
-	colBox = std::unique_ptr<sf::RectangleShape>(new sf::RectangleShape);
+	texture = std::make_unique<sf::Texture>(sf::Texture());
+	sprite = std::make_unique<sf::Sprite>(sf::Sprite());
+	colBox = std::make_unique<sf::RectangleShape>(sf::RectangleShape());
 
 	if (!texture->loadFromImage(image))
 	{

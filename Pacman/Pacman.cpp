@@ -73,7 +73,6 @@ void Pacman::move(float deltaTime)
 					{
 						if (t->getIsTeleporter() && t != tile)
 						{
-
 							CurrentTile = t;
 							break;
 						}
@@ -83,6 +82,7 @@ void Pacman::move(float deltaTime)
 				{
 					CurrentTile = tile;
 				}
+				lastDirection = moveDirection;
 				pos = CurrentTile->getPos();
 				CurrentTile->setPacmanIsHere(false);
 				CurrentTile->setPacmanIsHere(true);
@@ -93,12 +93,12 @@ void Pacman::move(float deltaTime)
 			}
 			else
 			{
-				isMoving = false;
+				moveDirection = lastDirection;
 			}
 		}
 		else
 		{
-			isMoving = false;
+			moveDirection = lastDirection;
 		}
 
 		sprite->setPosition(pos);

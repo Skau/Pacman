@@ -12,3 +12,26 @@ Blinky::Blinky(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Ti
 {
 	std::cout << "Blinky pos: " << pos.x << ", " << pos.y << std::endl;
 }
+
+void Blinky::childTick()
+{
+}
+
+void Blinky::Chase()
+{
+	if (pacman)
+	{
+		sf::Vector2f location = pacman->getPos();
+
+		if (location == pos) game->resetGame();
+
+		if (!pathToMoveTiles.size() || manhattan(pos, location) > 750)
+		{
+			findPath(pos, location);
+		}
+		else
+		{
+			move();
+		}
+	}
+}

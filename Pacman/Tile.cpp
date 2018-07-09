@@ -7,11 +7,11 @@ Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Gam
 	game{ &g }, isWalkable { Walkable}, isSpawnpoint{ Spawnpoint }, isTeleporter{ Teleporter }, 
 	isPlayerBlock{ playerBlock }, isIntersection{ Intersection }, tileID{ TileIDin }, gCost{ 0 }
 { 
-	baseTexture = std::unique_ptr<sf::Texture>(new sf::Texture);
+	baseTexture = std::make_unique<sf::Texture>(sf::Texture());
 
 	baseTexture->loadFromImage(baseImage);
 
-	baseSprite = std::unique_ptr<sf::Sprite>(new sf::Sprite);
+	baseSprite = std::make_unique<sf::Sprite>(sf::Sprite());
 	baseSprite->setTexture(*baseTexture);
 
 	baseSprite->setPosition(Position);
@@ -25,7 +25,7 @@ Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Gam
 	}
 	pos = Position;
 
-	colBox = std::unique_ptr<sf::RectangleShape>(new sf::RectangleShape());
+	colBox = std::make_unique<sf::RectangleShape>(sf::RectangleShape());
 	colBox->setSize(sf::Vector2f(16, 16));
 	colBox->setOrigin(sf::Vector2f(8, 8));
 	colBox->setPosition(pos);
@@ -34,10 +34,10 @@ Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Gam
 
 	if (isWalkable && !isSpawnpoint && !Teleporter)
 	{
-		dotTexture = std::unique_ptr<sf::Texture>(new sf::Texture);
+		dotTexture = std::make_unique<sf::Texture>(sf::Texture());
 		dotTexture->loadFromImage(dotImage);
 
-		dotSprite = std::unique_ptr<sf::Sprite>(new sf::Sprite);
+		dotSprite = std::make_unique<sf::Sprite>(sf::Sprite());
 		dotSprite->setTexture(*dotTexture);
 
 		dotSprite->setOrigin(4, 4);
