@@ -16,22 +16,25 @@ class Enemy : public Entity
 {
 public:
 	Enemy()=default;
-	Enemy(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Tile> scatterTileIn, std::weak_ptr<Map> MapIn, Game& game);
+	Enemy(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Tile> scatterTileIn, std::weak_ptr<Map> mapIn, Game& game, bool isClydeIn);
 	~Enemy()=default;
+
+	void startMoving() { isStarted = true; }
+
+	void toggleShowPath();
+
+	void triggerGhostMode();
 
 protected:
 	void tick(float deltaTime);
 
 	virtual void Chase()=0;
-	virtual void childTick() = 0;
 
 	void Scatter();
 
 	void Ghost();
 
 	void findPath(sf::Vector2f startLocation, sf::Vector2f endLocation);
-
-	std::shared_ptr<Tile> EndTile;
 
 	void findAdjacentTiles(std::shared_ptr<Tile> currentTile, std::shared_ptr<Tile> endTile);
 
@@ -53,7 +56,10 @@ protected:
 
 	void clearAndResetImageOnPathToMove();
 
+	bool showPath;
+
 	bool canMove;
+	bool ghostMove;
 
 	bool foundPathToScatterTile;
 
@@ -61,15 +67,25 @@ protected:
 
 	std::vector<sf::Time> timeBetweenStates;
 
-	sf::Clock clock;
+	sf::Clock stateClock;
+
+	sf::Clock ghostClock;
+	sf::Time ghostTime;
+	sf::Time ghostTimeElapsed;
+
+	sf::Clock movementClock;
+	sf::Time movementTime;
+	sf::Time movementTimeElapsed;
 
 	sf::Vector2f bannedPos;
 
 	std::shared_ptr<Pacman> pacman;
 
-	std::shared_ptr<Map> map;
-
 	std::shared_ptr<Tile> scatterTile;
+
+	bool isStarted;
+
+	bool isClyde;
 
 	std::vector<std::shared_ptr<Tile>> openTiles;
 	std::vector<std::shared_ptr<Tile>> closedTiles;

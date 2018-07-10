@@ -3,15 +3,10 @@
 #include "Pacman.h"
 #include "Game.h"
 
-Pinky::Pinky(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Tile> scatterTileIn, std::weak_ptr<Map> MapIn, Game& game)
-	: Enemy{ image, SpawnTile, scatterTileIn, MapIn, game }
+Pinky::Pinky(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Tile> scatterTileIn, std::weak_ptr<Map> MapIn, Game& game, bool isClydeIn)
+	: Enemy{ image, SpawnTile, scatterTileIn, MapIn, game, isClydeIn }
 {
 	std::cout << "Pinky pos: " << pos.x << ", " << pos.y << std::endl;
-}
-
-void Pinky::childTick()
-{
-
 }
 
 void Pinky::Chase()

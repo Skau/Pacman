@@ -41,7 +41,7 @@ void Map::loadMap()
 		for (int i = 0; i < objectArray.size(); ++i)
 		{
 			// Get value of element
-			auto val = objectArray[i];
+			picojson::value val = objectArray[i];
 			// Get object of value
 			picojson::value::object& o = val.get<picojson::object>();
 			// Get x and y coordinates of object
@@ -56,18 +56,21 @@ void Map::loadMap()
 
 			// Check type and spawn tile with correct properties
 			if (type == "teleporterTile")
-				allTiles.push_back(std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, true, false, false, id));
+				allTiles.emplace_back(std::make_shared<Tile>(
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, true, false, false, false, id));
 			else if (type == "intersectionTile")
-				allTiles.push_back(std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, true, id));
+				allTiles.emplace_back(std::make_shared<Tile>(
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, true, false, id));
 			else if (type == "collisionTile")
-				allTiles.push_back(std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(0), sf::Vector2f(x, y), *game, false, false, false, true, false, id));
+				allTiles.emplace_back(std::make_shared<Tile>(
+					imageManager->getImage(8), imageManager->getImage(0), sf::Vector2f(x, y), *game, false, false, false, true, false, false, id));
+			else if(type == "pelletTile")
+				allTiles.emplace_back(std::make_shared<Tile>(
+					imageManager->getImage(9), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, true, id));
 			else if (type == "playerSpawnpoint")
 			{
 				std::shared_ptr<Tile> newTile = std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, true, false, false, false, id);
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, true, false, false, false, false, id);
 				allTiles.push_back(newTile);
 				newTile->setPacmanIsHere(true);
 				playerSpawnPoint = newTile;
@@ -75,62 +78,62 @@ void Map::loadMap()
 			else if (type == "enemySpawnTile1")
 			{
 				std::shared_ptr<Tile> newTile = std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, true, false, true, false, id);
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, true, false, true, false, false, id);
 				enemy1Spawnpoint = newTile;
 				allTiles.push_back(newTile);
 			}
 			else if (type == "enemySpawnTile2")
 			{
 				std::shared_ptr<Tile> newTile = std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, true, false, true, false, id);
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, true, false, true, false, false, id);
 				enemy2Spawnpoint = newTile;
 				allTiles.push_back(newTile);
 			}
 			else if (type == "enemySpawnTile3")
 			{
 				std::shared_ptr<Tile> newTile = std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, true, false, true, false, id);
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, true, false, true, false, false, id);
 				enemy3Spawnpoint = newTile;
 				allTiles.push_back(newTile);
 			}
 			else if (type == "enemySpawnTile4")
 			{
 				std::shared_ptr<Tile> newTile = std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, true, false, true, false, id);
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, true, false, true, false, false, id);
 				enemy4Spawnpoint = newTile;
 				allTiles.push_back(newTile);
 			}
 			else if (type == "enemy1ScatterTile")
 			{
 				std::shared_ptr<Tile> newTile = std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, id);
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, false, id);
 				enemy1ScatterTile = newTile;
 				allTiles.push_back(newTile);
 			}
 			else if (type == "enemy2ScatterTile")
 			{
 				std::shared_ptr<Tile> newTile = std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, id);
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, false, id);
 				enemy2ScatterTile = newTile;
 				allTiles.push_back(newTile);
 			}
 			else if (type == "enemy3ScatterTile")
 			{
 				std::shared_ptr<Tile> newTile = std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, id);
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, false, id);
 				enemy3ScatterTile = newTile;
 				allTiles.push_back(newTile);
 			}
 			else if (type == "enemy4ScatterTile")
 			{
 				std::shared_ptr<Tile> newTile = std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, id);
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, false, id);
 				enemy4ScatterTile = newTile;
 				allTiles.push_back(newTile);
 			}
 			else
-				allTiles.push_back(std::make_shared<Tile>(
-					imageManager->getImage(4), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, id));
+				allTiles.emplace_back(std::make_shared<Tile>(
+					imageManager->getImage(8), imageManager->getImage(1), sf::Vector2f(x, y), *game, true, false, false, false, false, false, id));
 		}
 		std::cout << "Spawning tiles DONE!\n";
 	}
@@ -182,12 +185,12 @@ bool Map::checkIfAdjacentTileIsInOfRange(sf::Vector2f currentLoc, Direction dir)
 	}
 }
 
-std::shared_ptr<Tile> Map::getTileAtLocation(sf::Vector2f location)
+std::shared_ptr<Tile> Map::getTileAtLocation(sf::Vector2f location) const
 {
 	return allTiles[(int)((location.x/16) * 36 + (location.y/16))];
 }
 
-std::shared_ptr<Tile> Map::getTileInDirectionFromLocation(sf::Vector2f location, Direction dir)
+std::shared_ptr<Tile> Map::getTileInDirectionFromLocation(sf::Vector2f location, Direction dir) const
 {
 	std::shared_ptr<Tile> tileToReturn;
 

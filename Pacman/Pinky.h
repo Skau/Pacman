@@ -5,12 +5,10 @@ class Pinky :
 {
 public:
 	Pinky()=default;
-	Pinky(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Tile> scatterTileIn, std::weak_ptr<Map> MapIn, Game& game);
+	Pinky(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Tile> scatterTileIn, std::weak_ptr<Map> MapIn, Game& game, bool isClydeIn);
 	~Pinky()=default;
 
 private:
-	void childTick() override;
-
 	void Chase() override;
 
 	Direction pacmanLastDirection;

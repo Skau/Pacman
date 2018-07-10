@@ -7,7 +7,7 @@ class Tile
 {
 public:
 	Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Game& g,
-		bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, int tileIDIn);
+		bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, bool pelletIn, int tileIDIn);
 	~Tile();
 
 	void Draw(sf::RenderWindow& window);
@@ -38,11 +38,15 @@ public:
 
 	bool getHasDot() { return hasDot; }
 
+	bool getHasPellet() { return hasPellet; }
+
 	bool getIsPlayerBlock() { return isPlayerBlock; }
 
 	bool getIsIntersection() { return isIntersection; }
 
 	void destroyDot();
+
+	void destroyPellet();
 
 	void setPacmanIsHere(bool value) { pacmanIsHere = value; }
 	bool getPacmanIsHere() { return pacmanIsHere; }
@@ -90,5 +94,6 @@ private:
 	bool hasDot;
 	bool isPlayerBlock;
 	bool isIntersection;
+	bool hasPellet;
 };
 

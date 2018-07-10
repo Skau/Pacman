@@ -1,11 +1,11 @@
-#include "Tile.h"
+ #include "Tile.h"
 #include <iostream>
 #include "Game.h"
 
 Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Game& g,
-	bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, int TileIDin) :
-	game{ &g }, isWalkable { Walkable}, isSpawnpoint{ Spawnpoint }, isTeleporter{ Teleporter }, 
-	isPlayerBlock{ playerBlock }, isIntersection{ Intersection }, tileID{ TileIDin }, gCost{ 0 }
+	bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, bool pelletIn, int TileIDin) :
+	game{ &g }, isWalkable { Walkable}, isSpawnpoint{ Spawnpoint }, isTeleporter{ Teleporter }, isPlayerBlock{ playerBlock }, 
+	isIntersection{ Intersection }, hasPellet{ pelletIn }, tileID{ TileIDin }, gCost{ 0 }, hasDot{ false }
 { 
 	baseTexture = std::make_unique<sf::Texture>(sf::Texture());
 
@@ -32,7 +32,7 @@ Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Gam
 	colBox->setOutlineThickness(1.5f);
 	colBox->setOutlineColor(sf::Color::Red);
 
-	if (isWalkable && !isSpawnpoint && !Teleporter)
+	if (isWalkable && !isSpawnpoint && !Teleporter && !hasPellet)
 	{
 		dotTexture = std::make_unique<sf::Texture>(sf::Texture());
 		dotTexture->loadFromImage(dotImage);
@@ -44,11 +44,19 @@ Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Gam
 		dotSprite->setPosition(Position);
 		
 		hasDot = true;
-		game->dotsLeft++;
+		game->incrementDotsLeft();
 	}
-	else
+
+	if (hasPellet)
 	{
-		hasDot = false;
+		dotTexture = std::make_unique<sf::Texture>(sf::Texture());
+		dotTexture->loadFromImage(dotImage);
+
+		dotSprite = std::make_unique<sf::Sprite>(sf::Sprite());
+		dotSprite->setTexture(*dotTexture);
+
+		dotSprite->setOrigin(7, 6);
+		dotSprite->setPosition(Position);
 	}
 }
 
@@ -77,11 +85,23 @@ void Tile::destroyDot()
 {
 	if (dotSprite)
 	{
-		if (game->dotsLeft > 1)
-			game->dotsLeft--;
+		if (game->getDotsLeft() > 1)
+		{
+			game->decrementDotsLeft();
+		}
 		else
+		{
+			std::cout << "Game won!\n";
 			game->resetGame();
+		}
+		dotSprite.release();
+	}
+}
 
+void Tile::destroyPellet()
+{
+	if (dotSprite)
+	{
 		dotSprite.release();
 	}
 }

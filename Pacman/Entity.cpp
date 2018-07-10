@@ -4,8 +4,10 @@
 #include "Entity.h"
 #include "Globals.h"
 #include "Tile.h"
+#include "Map.h"
 
-Entity::Entity(sf::Image& image, std::weak_ptr<Tile> SpawnTile, Game& g) : pos{0,0}, vel{0,0}, game{ &g }
+Entity::Entity(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Map> mapIn, Game& g) : 
+	pos{ 0,0 }, vel{ 0,0 }, game { &g }
 {
 	texture = std::make_unique<sf::Texture>(sf::Texture());
 	sprite = std::make_unique<sf::Sprite>(sf::Sprite());
@@ -17,8 +19,13 @@ Entity::Entity(sf::Image& image, std::weak_ptr<Tile> SpawnTile, Game& g) : pos{0
 	}
 	texture->setSmooth(true);
 	sprite->setTexture(*texture);
+	auto m = mapIn.lock();
+	if (m.get())
+	{
+		map = m;
+	}
 	auto st = SpawnTile.lock();
-	if (st)
+	if (st.get())
 	{
 		CurrentTile = st;
 		pos = CurrentTile->getPos();
@@ -47,5 +54,12 @@ void Entity::setPos(sf::Vector2f posIn)
 	pos = posIn;
 	sprite->setPosition(pos);
 	colBox->setPosition(pos);
+}
+
+void Entity::destroyEntity()
+{
+	texture.release();
+	sprite.release();
+	colBox.release();
 }
 

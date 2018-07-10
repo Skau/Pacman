@@ -3,15 +3,10 @@
 #include "Pacman.h"
 #include "Blinky.h"
 #include "Game.h"
-Inky::Inky(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Tile> scatterTileIn, std::weak_ptr<Map> MapIn, Game& game)
-	: Enemy{ image, SpawnTile, scatterTileIn, MapIn, game }
+Inky::Inky(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Tile> scatterTileIn, std::weak_ptr<Map> MapIn, Game& game, bool isClydeIn)
+	: Enemy{ image, SpawnTile, scatterTileIn, MapIn, game, isClydeIn }
 {
 	std::cout << "Inky pos: " << pos.x << ", " << pos.y << std::endl;
-}
-
-
-void Inky::childTick()
-{
 }
 
 void Inky::Chase()
@@ -22,7 +17,6 @@ void Inky::Chase()
 		if (!pathToMoveTiles.size() || pacmanLastDirection != dir)
 		{
 			sf::Vector2f pacmanPos = pacman->getPos();
-			sf::Vector2f blinkyPos = game->getBlinky()->getPos();
 			sf::Vector2f twoTilesInFrontPos = sf::Vector2f(-1, -1);
 
 
@@ -92,36 +86,43 @@ void Inky::Chase()
 
 			sf::Vector2f movePos;
 
-			// Found possible location
-			if (twoTilesInFrontPos.x > -1)
+			if (game->getBlinky().get())
 			{
-				if (twoTilesInFrontPos.x < blinkyPos.x)
+				sf::Vector2f blinkyPos = game->getBlinky()->getPos();
+				if (twoTilesInFrontPos.x > -1 && twoTilesInFrontPos != pacman->getPos())
 				{
-					movePos.x = twoTilesInFrontPos.x - abs(twoTilesInFrontPos.x - blinkyPos.x);
-				}
-				else if (twoTilesInFrontPos.x > blinkyPos.x)
-				{
-					movePos.x = twoTilesInFrontPos.x + abs(twoTilesInFrontPos.x - blinkyPos.x);
-				}
-				else
-				{
-					movePos.x = twoTilesInFrontPos.x;
-				}
+					if (twoTilesInFrontPos.x < blinkyPos.x)
+					{
+						movePos.x = twoTilesInFrontPos.x += -abs(twoTilesInFrontPos.x - blinkyPos.x);
+					}
+					else if (twoTilesInFrontPos.x > blinkyPos.x)
+					{
+						movePos.x = twoTilesInFrontPos.x += abs(twoTilesInFrontPos.x - blinkyPos.x);
+					}
+					else
+					{
+						movePos.x = twoTilesInFrontPos.x;
+					}
 
-				if (twoTilesInFrontPos.y < blinkyPos.y)
-				{
-					movePos.y = twoTilesInFrontPos.y - abs(twoTilesInFrontPos.y - blinkyPos.y);
-				}
-				else if (twoTilesInFrontPos.y > blinkyPos.y)
-				{
-					movePos.y = twoTilesInFrontPos.y + abs(twoTilesInFrontPos.y - blinkyPos.y);
+					if (twoTilesInFrontPos.y < blinkyPos.y)
+					{
+						movePos.y = twoTilesInFrontPos.y -= abs(twoTilesInFrontPos.y - blinkyPos.y);
+					}
+					else if (twoTilesInFrontPos.y > blinkyPos.y)
+					{
+						movePos.y = twoTilesInFrontPos.y += abs(twoTilesInFrontPos.y - blinkyPos.y);
+					}
+					else
+					{
+						movePos.y = twoTilesInFrontPos.y;
+					}
+					std::cout << movePos.x << ", " << movePos.y << std::endl;
+					findPath(pos, movePos);
 				}
 				else
 				{
-					movePos.y = twoTilesInFrontPos.y;
+					findPath(pos, pacmanPos);
 				}
-				std::cout << movePos.x << ", " << movePos.y << std::endl;
-				findPath(pos, movePos);
 			}
 			else
 			{

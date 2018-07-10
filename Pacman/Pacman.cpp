@@ -2,9 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Globals.h"
+#include "Game.h"
 #include "Tile.h"
-
-Pacman::Pacman(sf::Image & image, std::weak_ptr<Tile> SpawnTile, Game& game) : Entity{ image, SpawnTile, game }
+Pacman::Pacman(sf::Image & image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Map> mapIn, Game& game) : Entity{ image, SpawnTile, mapIn, game }
 {
 	std::cout << "Player pos: " << pos.x << ", " << pos.y << std::endl;
 }
@@ -89,6 +89,11 @@ void Pacman::move(float deltaTime)
 				if (CurrentTile->getHasDot())
 				{
 					CurrentTile->destroyDot();
+				}
+				else if (CurrentTile->getHasPellet())
+				{
+					CurrentTile->destroyPellet();
+					game->triggerGhostMode();
 				}
 			}
 			else

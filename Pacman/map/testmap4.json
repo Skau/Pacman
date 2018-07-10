@@ -67,7 +67,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"pelletTile",
                  "visible":true,
                  "width":16,
                  "x":16,
@@ -1356,7 +1356,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"pelletTile",
                  "visible":true,
                  "width":16,
                  "x":416,
@@ -2179,7 +2179,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"walkTile",
+                 "type":"pelletTile",
                  "visible":true,
                  "width":16,
                  "x":416,
@@ -4945,7 +4945,7 @@
                      "isWalkable":"bool"
                     },
                  "rotation":0,
-                 "type":"power",
+                 "type":"pelletTile",
                  "visible":true,
                  "width":16,
                  "x":16,

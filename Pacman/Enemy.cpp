@@ -8,22 +8,25 @@
 #include "Map.h"
 
 
-Enemy::Enemy(sf::Image & image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Tile> scatterTileIn, std::weak_ptr<Map> MapIn, Game & game) 
-	: Entity{ image, SpawnTile, game }, map { MapIn }
+Enemy::Enemy(sf::Image & image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Tile> scatterTileIn, std::weak_ptr<Map> mapIn, Game & game, bool isClydeIn)
+	: Entity{ image, SpawnTile, mapIn, game }, isClyde{ isClydeIn }, canMove{ true }, isStarted{ false }, showPath{ false }
 {
 	srand((int)time(NULL));
 
-	auto st = scatterTileIn.lock();
+	std::shared_ptr<Tile> st = scatterTileIn.lock();
 	if (st.get())
 	{
 		scatterTile = st;
 	}
 	pacman = game.getPacman();
-	if(EndTile.get())
-	EndTile = pacman->getCurrentTile();
-	canMove = true;
 
-	state = State::SCATTER;
+	movementTime = sf::Time(sf::milliseconds(100));
+	ghostTime = sf::Time(sf::seconds(8));
+
+	if (!isClyde)
+		state = State::SCATTER;
+	else
+		state = State::CHASE;
 	timeBetweenStates.push_back(sf::Time(sf::seconds(2000)));
 	timeBetweenStates.push_back(sf::Time(sf::seconds(20)));
 	timeBetweenStates.push_back(sf::Time(sf::seconds(7)));
@@ -38,44 +41,60 @@ Enemy::Enemy(sf::Image & image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Til
 
 void Enemy::tick(float deltaTime)
 {
-	if (timeBetweenStates.size())
+	movementTimeElapsed += movementClock.restart();
+	if (isStarted)
 	{
-		if (clock.getElapsedTime() > timeBetweenStates.back())
+		if (state == State::GHOST)
 		{
-			if (state == State::CHASE)
-				state = State::SCATTER;
-			else
+			ghostTimeElapsed += ghostClock.restart();
+			if (ghostTimeElapsed >ghostTime)
+			{
+				std::cout << "Ghost mode done!\n";
+				movementTime = sf::Time(sf::milliseconds(100));
 				state = State::CHASE;
-			timeBetweenStates.pop_back();
-			clock.restart();
+			}
+		}
+		else
+		{
+			if (pacman->getPos() == pos) game->resetGame();
+
+			if (!isClyde)
+			{
+				if (timeBetweenStates.size())
+				{
+					if (stateClock.getElapsedTime() > timeBetweenStates.back())
+					{
+						if (state == State::CHASE)
+							state = State::SCATTER;
+						else
+							state = State::CHASE;
+						timeBetweenStates.pop_back();
+						stateClock.restart();
+					}
+				}
+			}
+		}
+
+		switch (state)
+		{
+		case State::CHASE:
+			Chase();
+			break;
+		case State::SCATTER:
+			Scatter();
+			break;
+		case State::GHOST:
+			Ghost();
+			break;
+		default:
+			break;
 		}
 	}
-
-	if (pacman->getPos() == pos) game->resetGame();
-
-	if(pacman->getCurrentTile().get())
-	EndTile = pacman->getCurrentTile();
-	switch (state)
-	{
-	case State::CHASE:
-		Chase();
-		break;
-	case State::SCATTER:
-		Scatter();
-		break;
-	case State::GHOST:
-		Ghost();
-		break;
-	default:
-		break;
-	}
-
-	childTick();
 }
 
 void Enemy::Scatter()
 {
-	if (pos == pacman->getPos()) game->resetGame();
+	if (pos == pacman->getPos()) { std::cout << "Game lost!\n"; game->resetGame(); }
 
 	if (scatterTile.get())
 	{
@@ -89,7 +108,6 @@ void Enemy::Scatter()
 		{
 			findPath(pos, scatterTile->getPos());
 			foundPathToScatterTile = true;
-			std::cout << pathToMoveTiles.size() << std::endl;
 		}
 		else
 		{
@@ -104,6 +122,8 @@ void Enemy::Scatter()
 
 void Enemy::Ghost()
 {
+	if (pos == pacman->getPos()) game->killEnemy();
+
 	if (!pathToMoveTiles.size())
 	{
 		findPath(pos, findRandomIntersection());
@@ -167,7 +187,7 @@ void Enemy::findAdjacentTiles(std::shared_ptr<Tile> currentTile, std::shared_ptr
 	{
 		if (adjacentTiles.size()) adjacentTiles.clear();
 
-		for (auto direction : directions)
+		for (Direction& direction : directions)
 		{
 			if (map->checkIfAdjacentTileIsInOfRange(currentTile->getPos(), direction))
 			{
@@ -178,7 +198,7 @@ void Enemy::findAdjacentTiles(std::shared_ptr<Tile> currentTile, std::shared_ptr
 					{
 						if (tileToCheck->getIsTeleporter())
 						{
-							for (auto tile : map->getAllTiles())
+							for (std::shared_ptr<Tile> tile : map->getAllTiles())
 							{
 								if (tile.get())
 								{
@@ -203,7 +223,7 @@ void Enemy::findAdjacentTiles(std::shared_ptr<Tile> currentTile, std::shared_ptr
 		}
 	}
 	
-	for (auto tile : tilesToCheck)
+	for (std::shared_ptr<Tile> tile : tilesToCheck)
 	{
 		// Check to see if the neighbor exists
 		if (tile.get())
@@ -245,7 +265,7 @@ void Enemy::findAdjacentTiles(std::shared_ptr<Tile> currentTile, std::shared_ptr
 	}
 
 	// Calculate costs and add tiles to openTiles
-	for (auto tile : adjacentTiles)
+	for (std::shared_ptr<Tile> tile : adjacentTiles)
 	{
 		calculateCosts(tile, endTile);
 		openTiles.push_back(tile);
@@ -312,6 +332,7 @@ void Enemy::generatePath(std::shared_ptr<Tile> finalTile)
 					if (!findTileInVector(pathToMoveTiles.back()->getParentTile(), pathToMoveTiles) && pathToMoveTiles.back()->getParentTile()->getPos() != CurrentTile->getPos())
 					{
 						pathToMoveTiles.push_back(pathToMoveTiles.back()->getParentTile());
+						if(showPath)
 						pathToMoveTiles.back()->setImageGreen();
 					}
 					else
@@ -337,7 +358,7 @@ void Enemy::generatePath(std::shared_ptr<Tile> finalTile)
 void Enemy::move()
 {
 	// Bool is there to half the movement speed
-	if (pathToMoveTiles.size() && canMove)
+	if (pathToMoveTiles.size() && movementTimeElapsed > movementTime)
 	{
 		bannedPos = CurrentTile->getPos();
 		if (pathToMoveTiles.back().get())
@@ -348,19 +369,19 @@ void Enemy::move()
 			colBox->setPosition(pos);
 			pathToMoveTiles.back()->setImageOriginal();
 			pathToMoveTiles.pop_back();
+			movementTimeElapsed = sf::Time::Zero;
 		}
 	}
 	else if (!pathToMoveTiles.size() && foundPathToScatterTile)
 	{
 		foundPathToScatterTile = false;
 	}
-	canMove = !canMove;
 }
 
 sf::Vector2f Enemy::findRandomIntersection()
 {
 	std::vector<std::shared_ptr<Tile>> intersections;
-	for (auto tile : map->getAllTiles())
+	for (std::shared_ptr<Tile> tile : map->getAllTiles())
 	{
 		if (tile->getIsIntersection())
 		{
@@ -368,7 +389,7 @@ sf::Vector2f Enemy::findRandomIntersection()
 		}
 	}
 
-	int i = rand() & intersections.size();
+	int i = rand() % intersections.size();
 
 	return intersections[i]->getPos();
 }
@@ -397,10 +418,37 @@ bool Enemy::findTileInVector(std::shared_ptr<Tile> TileToCheck, std::vector<std:
 
 void Enemy::clearAndResetImageOnPathToMove()
 {
-	for (auto tile : pathToMoveTiles)
+	for (std::shared_ptr<Tile> tile : pathToMoveTiles)
 	{
 		if(tile.get())
 		tile->setImageOriginal();
 	}
 	pathToMoveTiles.clear();
 }
+
+void Enemy::toggleShowPath()
+{
+	if (showPath)
+	{
+		for (std::shared_ptr<Tile> tile : pathToMoveTiles)
+		{
+			tile->setImageOriginal();
+		}
+	}
+	else
+	{
+		for (std::shared_ptr<Tile> tile : pathToMoveTiles)
+		{
+			tile->setImageGreen();
+		}
+	}
+	showPath = !showPath;
+}
+
+void Enemy::triggerGhostMode()
+{
+	state = State::GHOST;
+	movementTime = movementTime = sf::Time(sf::milliseconds(250));
+	ghostClock.restart();
+}
+
