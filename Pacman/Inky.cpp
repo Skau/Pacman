@@ -21,70 +21,66 @@ void Inky::Chase()
 		Direction dir = pacman->getMoveDirection();
 		if (!pathToMoveTiles.size() || pacmanLastDirection != dir)
 		{
-			sf::Vector2f pacmanLoc = pacman->getPos();
-			sf::Vector2f blinkyLoc = game->getBlinky()->getPos();
-			sf::Vector2f location = sf::Vector2f(-1, -1);
+			sf::Vector2f pacmanPos = pacman->getPos();
+			sf::Vector2f blinkyPos = game->getBlinky()->getPos();
+			sf::Vector2f twoTilesInFrontPos = sf::Vector2f(-1, -1);
 
-			float valueToAddToX = (pos.x - blinkyLoc.x) / 16;
-			float valueToAddToY = (pos.y - blinkyLoc.y) / 16;
-			
-			sf::Vector2f location = sf::Vector2f(valueToAddToX, valueToAddToY);
 
 			switch (dir)
 			{
 			case Direction::UP:
 			{
-				if (map->checkIfAdjacentTileIsInOfRange(sf::Vector2f(pacmanLoc.x, pacmanLoc.y - 32), Direction::DEFAULT))
+				if (map->checkIfAdjacentTileIsInOfRange(sf::Vector2f(pacmanPos.x, pacmanPos.y - 32), Direction::DEFAULT))
 				{
-					if (map->getTileAtLocation(sf::Vector2f(pacmanLoc.x, pacmanLoc.y - 32))->getIsWalkable())
+					if (map->getTileAtLocation(sf::Vector2f(pacmanPos.x, pacmanPos.y - 32))->getIsWalkable())
 					{
-						location = sf::Vector2f(pacmanLoc.x, pacmanLoc.y - 32);
+						twoTilesInFrontPos = sf::Vector2f(pacmanPos.x, pacmanPos.y - 32);
 					}
 					else
 					{
-						location = pacman->getPos();
+						twoTilesInFrontPos = pacman->getPos();
 					}
 				}
 			}
 			case Direction::DOWN:
 			{
-				if (map->checkIfAdjacentTileIsInOfRange(sf::Vector2f(pacmanLoc.x, pacmanLoc.y + 32), Direction::DEFAULT))
+				if (map->checkIfAdjacentTileIsInOfRange(sf::Vector2f(pacmanPos.x, pacmanPos.y + 32), Direction::DEFAULT))
 				{
-					if (map->getTileAtLocation(sf::Vector2f(pacmanLoc.x, pacmanLoc.y + 32))->getIsWalkable())
+					if (map->getTileAtLocation(sf::Vector2f(pacmanPos.x, pacmanPos.y + 32))->getIsWalkable())
 					{
-						location = sf::Vector2f(pacmanLoc.x, pacmanLoc.y + 32);
+						twoTilesInFrontPos = sf::Vector2f(pacmanPos.x, pacmanPos.y + 32);
 					}
 					else
 					{
-						location = pacman->getPos();
+						twoTilesInFrontPos = pacman->getPos();
 					}
 				}
 			}
 			case Direction::LEFT:
 			{
-				if (map->checkIfAdjacentTileIsInOfRange(sf::Vector2f(pacmanLoc.x - 32, pacmanLoc.y), Direction::DEFAULT))
+				if (map->checkIfAdjacentTileIsInOfRange(sf::Vector2f(pacmanPos.x - 32, pacmanPos.y), Direction::DEFAULT))
 				{
-					if (map->getTileAtLocation(sf::Vector2f(pacmanLoc.x - 32, pacmanLoc.y))->getIsWalkable())
+					if (map->getTileAtLocation(sf::Vector2f(pacmanPos.x - 32, pacmanPos.y))->getIsWalkable())
 					{
-						location = sf::Vector2f(pacmanLoc.x - 32, pacmanLoc.y);
+						twoTilesInFrontPos = sf::Vector2f(pacmanPos.x - 32, pacmanPos.y);
 					}
 					else
 					{
-						location = pacman->getPos();
+						twoTilesInFrontPos = pacman->getPos();
 					}
 				}
 			}
 			case Direction::RIGHT:
 			{
-				if (map->checkIfAdjacentTileIsInOfRange(sf::Vector2f(pacmanLoc.x + 32, pacmanLoc.y), Direction::DEFAULT))
+				if (map->checkIfAdjacentTileIsInOfRange(sf::Vector2f(pacmanPos.x + 32, pacmanPos.y), Direction::DEFAULT))
 				{
-					if (map->getTileAtLocation(sf::Vector2f(pacmanLoc.x + 32, pacmanLoc.y))->getIsWalkable())
+					if (map->getTileAtLocation(sf::Vector2f(pacmanPos.x + 32, pacmanPos.y))->getIsWalkable())
 					{
-						location = sf::Vector2f(pacmanLoc.x + 32, pacmanLoc.y);
+						twoTilesInFrontPos = sf::Vector2f(pacmanPos.x + 32, pacmanPos.y);
 					}
 					else
 					{
-						location = pacman->getPos();
+						twoTilesInFrontPos = pacman->getPos();
 					}
 				}
 			}
@@ -94,12 +90,42 @@ void Inky::Chase()
 
 			pacmanLastDirection = dir;
 
+			sf::Vector2f movePos;
+
 			// Found possible location
-			if (location.x > -1)
+			if (twoTilesInFrontPos.x > -1)
 			{
-				sf::Vector2f moveLoc = sf::Vector2f((abs(location.x - blinkyLoc.x)), (abs(location.y - blinkyLoc.y))) * 2.f;
-				findPath(pos, moveLoc);
-				std::cout << moveLoc.x << ", " << moveLoc.y << std::endl;
+				if (twoTilesInFrontPos.x < blinkyPos.x)
+				{
+					movePos.x = twoTilesInFrontPos.x - abs(twoTilesInFrontPos.x - blinkyPos.x);
+				}
+				else if (twoTilesInFrontPos.x > blinkyPos.x)
+				{
+					movePos.x = twoTilesInFrontPos.x + abs(twoTilesInFrontPos.x - blinkyPos.x);
+				}
+				else
+				{
+					movePos.x = twoTilesInFrontPos.x;
+				}
+
+				if (twoTilesInFrontPos.y < blinkyPos.y)
+				{
+					movePos.y = twoTilesInFrontPos.y - abs(twoTilesInFrontPos.y - blinkyPos.y);
+				}
+				else if (twoTilesInFrontPos.y > blinkyPos.y)
+				{
+					movePos.y = twoTilesInFrontPos.y + abs(twoTilesInFrontPos.y - blinkyPos.y);
+				}
+				else
+				{
+					movePos.y = twoTilesInFrontPos.y;
+				}
+				std::cout << movePos.x << ", " << movePos.y << std::endl;
+				findPath(pos, movePos);
+			}
+			else
+			{
+				findPath(pos, pacmanPos);
 			}
 		}
 		else

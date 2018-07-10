@@ -23,8 +23,6 @@ void Blinky::Chase()
 	{
 		sf::Vector2f location = pacman->getPos();
 
-		if (location == pos) game->resetGame();
-
 		if (!pathToMoveTiles.size() || manhattan(pos, location) > 750)
 		{
 			findPath(pos, location);

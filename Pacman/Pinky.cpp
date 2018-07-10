@@ -18,8 +18,6 @@ void Pinky::Chase()
 {
 	if (pacman.get())
 	{
-		if (pacman->getPos() == pos) game->resetGame();
-
 		Direction dir = pacman->getMoveDirection();
 		if (!pathToMoveTiles.size() || dir != pacmanLastDirection)
 		{

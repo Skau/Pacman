@@ -51,6 +51,8 @@ void Enemy::tick(float deltaTime)
 		}
 	}
 
+	if (pacman->getPos() == pos) game->resetGame();
+
 	if(pacman->getCurrentTile().get())
 	EndTile = pacman->getCurrentTile();
 	switch (state)
@@ -79,7 +81,6 @@ void Enemy::Scatter()
 	{
 		if (!pathToMoveTiles.size())
 		{
-			std::cout << "DONE! CurrentTile( " << CurrentTile->getPos().x << ", " << CurrentTile->getPos().y << std::endl;
 			findPath(pos, sf::Vector2f(208,240));
 			foundPathToScatterTile = false;
 		}
