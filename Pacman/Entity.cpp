@@ -7,7 +7,7 @@
 #include "Map.h"
 
 Entity::Entity(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Map> mapIn, Game& g) : 
-	pos{ 0,0 }, vel{ 0,0 }, game { &g }
+	pos{ 0,0 }, vel{ 0,0 }, game{ &g }, isDead{ false }
 {
 	texture = std::make_unique<sf::Texture>(sf::Texture());
 	sprite = std::make_unique<sf::Sprite>(sf::Sprite());
@@ -19,11 +19,13 @@ Entity::Entity(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Ma
 	}
 	texture->setSmooth(true);
 	sprite->setTexture(*texture);
+
 	auto m = mapIn.lock();
 	if (m.get())
 	{
 		map = m;
 	}
+
 	auto st = SpawnTile.lock();
 	if (st.get())
 	{
@@ -32,12 +34,12 @@ Entity::Entity(sf::Image& image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Ma
 	}
 	auto p = texture->getSize();
 	auto pp = sf::Vector2f(p);
-	sprite->setOrigin(sf::Vector2f(pp.x / 2, pp.y / 2));
 
+	sprite->setOrigin(sf::Vector2f(pp.x / 2, pp.y / 2));
 	sprite->setPosition(pos);
+
 	colBox->setSize(pp);
 	colBox->setOrigin(sf::Vector2f(pp.x / 2, pp.y / 2));
-
 	colBox->setFillColor(sf::Color::Transparent);
 	colBox->setPosition(pos);
 

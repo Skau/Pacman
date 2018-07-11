@@ -24,25 +24,26 @@ public:
 
 	bool checkIfAdjacentTileIsInOfRange(sf::Vector2f currentLoc, Direction dir);
 
-	std::shared_ptr<Tile> getPlayerSpawnTile() const { return playerSpawnPoint; }
-	std::shared_ptr<Tile> getEnemy1Spawnpoint() const { return enemy1Spawnpoint; }
-	std::shared_ptr<Tile> getEnemy2Spawnpoint() const { return enemy2Spawnpoint; }
-	std::shared_ptr<Tile> getEnemy3Spawnpoint() const { return enemy3Spawnpoint; }
-	std::shared_ptr<Tile> getEnemy4Spawnpoint() const { return enemy4Spawnpoint; }
+	std::shared_ptr<Tile> getTileAtLocation(sf::Vector2f location);
 
-	std::shared_ptr<Tile> getEnemy1ScatterTile() const { return enemy1ScatterTile; }
-	std::shared_ptr<Tile> getEnemy2ScatterTile() const { return enemy2ScatterTile; }
-	std::shared_ptr<Tile> getEnemy3ScatterTile() const { return enemy3ScatterTile; }
-	std::shared_ptr<Tile> getEnemy4ScatterTile() const { return enemy4ScatterTile; }
+	std::shared_ptr<Tile> getTileInDirectionFromLocation(sf::Vector2f location, Direction dir);
 
-	std::vector<std::shared_ptr<Tile>> getAllTiles() const { return allTiles; }
+	const std::shared_ptr<Tile> getPlayerSpawnTile() { return playerSpawnPoint; }
+	const std::shared_ptr<Tile> getEnemy1Spawnpoint() { return enemy1Spawnpoint; }
+	const std::shared_ptr<Tile> getEnemy2Spawnpoint() { return enemy2Spawnpoint; }
+	const std::shared_ptr<Tile> getEnemy3Spawnpoint() { return enemy3Spawnpoint; }
+	const std::shared_ptr<Tile> getEnemy4Spawnpoint() { return enemy4Spawnpoint; }
 
-	std::shared_ptr<Tile> getTileAtLocation(sf::Vector2f location) const;
-	std::shared_ptr<Tile> getTileInDirectionFromLocation(sf::Vector2f location, Direction dir) const;
+	const std::shared_ptr<Tile> getEnemy1ScatterTile() { return enemy1ScatterTile; }
+	const std::shared_ptr<Tile> getEnemy2ScatterTile() { return enemy2ScatterTile; }
+	const std::shared_ptr<Tile> getEnemy3ScatterTile() { return enemy3ScatterTile; }
+	const std::shared_ptr<Tile> getEnemy4ScatterTile() { return enemy4ScatterTile; }
+
+	const std::vector<std::shared_ptr<Tile>> getAllTiles() { return allTiles; }
+private:
 
 	void sortTiles();
-
-private:
+	
 	std::vector<std::shared_ptr<Tile>> allTiles;
 
 	std::shared_ptr<Tile> playerSpawnPoint;

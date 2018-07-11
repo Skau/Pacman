@@ -14,17 +14,19 @@ public:
 	virtual void tick(float deltaTime)=0;
 	void render(sf::RenderWindow& renderWindow);
 
-	std::shared_ptr<Tile> getCurrentTile() const { return CurrentTile; }
+	const std::shared_ptr<Tile> getCurrentTile() { return CurrentTile; }
 	void SetIsControllable(bool Value) { isControllable = Value; }
 	
-	sf::Sprite& GetSprite() const { return *sprite; }
+	const sf::Sprite& GetSprite() { return *sprite; }
 	sf::RectangleShape& getColBox() { return *colBox; }
 
-	sf::Vector2f getPos() const { return pos; }
+	const sf::Vector2f getPos() { return pos; }
 	void setPos(sf::Vector2f posIn);
 
-	void destroyEntity();
+	const bool getIsDead() { return isDead; }
+	void setIsDead(bool value ) { isDead = value; }
 
+	void destroyEntity();
 protected:
 	sf::Vector2f pos;
 	sf::Vector2f vel;
@@ -32,7 +34,7 @@ protected:
 	std::shared_ptr<Map> map;
 	bool moving;
 	bool isControllable;
-
+	bool isDead;
 	Game* game;
 
 	std::unique_ptr<sf::Texture> texture;

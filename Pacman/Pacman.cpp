@@ -84,8 +84,6 @@ void Pacman::move(float deltaTime)
 				}
 				lastDirection = moveDirection;
 				pos = CurrentTile->getPos();
-				CurrentTile->setPacmanIsHere(false);
-				CurrentTile->setPacmanIsHere(true);
 				if (CurrentTile->getHasDot())
 				{
 					CurrentTile->destroyDot();
@@ -93,7 +91,7 @@ void Pacman::move(float deltaTime)
 				else if (CurrentTile->getHasPellet())
 				{
 					CurrentTile->destroyPellet();
-					game->triggerGhostMode();
+					game->triggerFrightenedMode();
 				}
 			}
 			else

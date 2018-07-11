@@ -19,31 +19,31 @@ public:
 
 	void resetGame();
 
-	 std::shared_ptr<Pacman> getPacman() const { return pacman; }
-	 std::shared_ptr<Blinky> getBlinky() const { return blinky; }
-	 std::shared_ptr<Pinky> getPinky() const { return pinky; }
-	 std::shared_ptr<Inky> getInky() const { return inky; }
-	 std::shared_ptr<Clyde> getClyde() const { return clyde; }
+	const std::shared_ptr<Pacman> getPacman() { return pacman; }
+	const std::shared_ptr<Blinky> getBlinky() { return blinky; }
+	const std::shared_ptr<Pinky> getPinky() { return pinky; }
+	const std::shared_ptr<Inky> getInky() { return inky; }
+	const std::shared_ptr<Clyde> getClyde() { return clyde; }
 
-	void triggerGhostMode();
+	void triggerFrightenedMode();
 
-	void killEnemy();
-
-	int getDotsLeft() const { return dotsLeft; }
+	const int getDotsLeft() { return dotsLeft; }
 	void incrementDotsLeft() { dotsLeft++; }
 	void decrementDotsLeft() { dotsLeft--; }
 
 private:
-	void loadImages();
 	void createTexts();
 	void beginPlay();
 	void createEnemies();
+
 	void gameLoop();
 	void handleEvents();
 	void mainTick();
 	void render();
 
 	void toggleAIShowPath();
+
+	void destroyEntity(std::shared_ptr<Entity>& entity);
 
 	std::unique_ptr<sf::RenderWindow> window;
 

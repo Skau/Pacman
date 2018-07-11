@@ -6,8 +6,8 @@ class Game;
 class Tile
 {
 public:
-	Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Game& g,
-		bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, bool pelletIn, int tileIDIn);
+	Tile(sf::Vector2f Position, Game& g, bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock,
+		bool Intersection, bool pelletIn, int tileIDIn);
 	~Tile();
 
 	void Draw(sf::RenderWindow& window);
@@ -48,9 +48,6 @@ public:
 
 	void destroyPellet();
 
-	void setPacmanIsHere(bool value) { pacmanIsHere = value; }
-	bool getPacmanIsHere() { return pacmanIsHere; }
-
 	void resetGCost() { gCost = 0; }
 	void setGCost(int value) { gCost = value; }
 	int getGCost() { return gCost; }
@@ -79,15 +76,16 @@ private:
 	std::shared_ptr<Tile> TeleporterTile;
 	std::shared_ptr<Tile> ParentTile;
 
-	sf::Image OriginalImage;
+	sf::Image originalImage;
 	sf::Image greenImage;
+	sf::Image dotImage;
+	sf::Image pelletImage;
 
 	int tileID;
 	int gCost;
 	int hCost;
 	int fCost;
 
-	bool pacmanIsHere;
 	bool isSpawnpoint;
 	bool isWalkable;
 	bool isTeleporter;

@@ -20,8 +20,6 @@ Game::Game() : inkyHasStartedMoving{ false }, clydeHasStartedMoving{ false }
 	window->setKeyRepeatEnabled(true);
 
 	imageManager = std::make_shared<ImageManager>(ImageManager());
-
-	loadImages();
 }
 
 void Game::init()
@@ -35,77 +33,6 @@ void Game::init()
 	gamePaused = true;
 
 	beginPlay();
-}
-
-void Game::loadImages()
-{
-	sf::Image image;
-	if (!image.loadFromFile("images/blackImage.png"))
-	{
-		std::cout << "Failed to load black image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
-	if (!image.loadFromFile("images/blueImage.png"))
-	{
-		std::cout << "Failed to load blue image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
-	if (!image.loadFromFile("images/lightBlueImage.png"))
-	{
-		std::cout << "Failed to load lightblue image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
-	if (!image.loadFromFile("images/yellowImage.png"))
-	{
-		std::cout << "Failed to load yellow image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
-	if (!image.loadFromFile("images/orangeImage.png"))
-	{
-		std::cout << "Failed to load orange image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
-	if (!image.loadFromFile("images/purpleImage.png"))
-	{
-		std::cout << "Failed to load purple image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
-	if (!image.loadFromFile("images/redImage.png"))
-	{
-		std::cout << "Failed to load red image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
-	if (!image.loadFromFile("images/pinkImage.png"))
-	{
-		std::cout << "Failed to load pink image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
-	if (!image.loadFromFile("images/dotImage.png"))
-	{
-		std::cout << "Failed to load dot image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
-	if (!image.loadFromFile("images/whiteImage.png"))
-	{
-		std::cout << "Failed to load white image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
-	if (!image.loadFromFile("images/pelletImage.png"))
-	{
-		std::cout << "Failed to load pelletImage image!" << std::endl;
-		return;
-	}
-	imageManager->addImage(image);
 }
 
 void Game::createTexts()
@@ -123,7 +50,7 @@ void Game::createTexts()
 	}
 	pauseText->setFont(*font);
 	pauseText->setString("Press spacebar to toggle pause");
-	pauseText->setPosition(globals::SCREEN_WIDTH - 427 , globals::SCREEN_HEIGHT - 564);
+	pauseText->setPosition(globals::SCREEN_WIDTH - 427  , globals::SCREEN_HEIGHT - 564);
 	pauseText->setOutlineThickness(2);
 
 	dotsText->setFont(*font);
@@ -159,22 +86,22 @@ void Game::beginPlay()
 
 void Game::createEnemies()
 {
-	pacman = std::make_shared<Pacman>(imageManager->getImage(3), map->getPlayerSpawnTile(), map, *this);
+	pacman = std::make_shared<Pacman>(imageManager->getImage(0), map->getPlayerSpawnTile(), map, *this);
 	pacman->SetIsControllable(true);
 	allEntities.push_back(pacman);
 
-	blinky = std::make_shared<Blinky>(imageManager->getImage(6), map->getEnemy1Spawnpoint(), map->getEnemy1ScatterTile(), map, *this, false);
+	blinky = std::make_shared<Blinky>(imageManager->getImage(3), map->getEnemy1Spawnpoint(), map->getEnemy1ScatterTile(), map, *this, false);
 	allEntities.push_back(blinky);
 	blinky->startMoving();
 
-	pinky = std::make_shared<Pinky>(imageManager->getImage(7), map->getEnemy2Spawnpoint(), map->getEnemy2ScatterTile(), map, *this, false);
+	pinky = std::make_shared<Pinky>(imageManager->getImage(4), map->getEnemy2Spawnpoint(), map->getEnemy2ScatterTile(), map, *this, false);
 	allEntities.push_back(pinky);
 	pinky->startMoving();
 
-	inky = std::make_shared<Inky>(imageManager->getImage(2), map->getEnemy3Spawnpoint(), map->getEnemy3ScatterTile(), map, *this, false);
+	inky = std::make_shared<Inky>(imageManager->getImage(6), map->getEnemy3Spawnpoint(), map->getEnemy3ScatterTile(), map, *this, false);
 	allEntities.push_back(inky);
 
-	clyde = std::make_shared<Clyde>(imageManager->getImage(3), map->getEnemy4Spawnpoint(), map->getEnemy4ScatterTile(), map, *this, true);
+	clyde = std::make_shared<Clyde>(imageManager->getImage(1), map->getEnemy4Spawnpoint(), map->getEnemy4ScatterTile(), map, *this, true);
 	allEntities.push_back(clyde);
 }
 
@@ -256,9 +183,21 @@ void Game::mainTick()
 			}
 		}
 
-		for (std::shared_ptr<Entity>& entity : allEntities)
-			entity->tick(timePerFrame.asSeconds());
+		if (allEntities.size() == 1)
+			resetGame();
 
+		for(std::shared_ptr<Entity> entity : allEntities)
+		{
+			if (entity.get())
+				if (entity->getIsDead())
+				{
+					destroyEntity(entity);
+				}
+				else 
+				{
+					entity->tick(timePerFrame.asSeconds());
+				}
+		}
 	}
 }
 
@@ -269,14 +208,13 @@ void Game::render()
 	map->drawMap(*window);
 
 	for (std::shared_ptr<Entity>& entity : allEntities)
+		if(entity.get())
 		entity->render(*window);
-
-	if (gamePaused)
-		window->draw(*pauseText);
 
 	dotsText->setString("Dots left: " + std::to_string(dotsLeft));
 	window->draw(*dotsText);
 	window->draw(*resetText);
+	window->draw(*pauseText);
 	window->draw(*showPathText);
 
 	window->display();
@@ -294,46 +232,24 @@ void Game::toggleAIShowPath()
 		clyde->toggleShowPath();
 }
 
-void Game::triggerGhostMode()
+void Game::destroyEntity(std::shared_ptr<Entity>& entity)
 {
-	std::cout << "Triggered ghost mode!\n";
-	if (blinky.get())
-		blinky->triggerGhostMode();
-	if (pinky.get())
-		pinky->triggerGhostMode();
-	if (inky.get())
-		inky->triggerGhostMode();
-	if (clyde.get())
-		clyde->triggerGhostMode();
+	entity->destroyEntity();
+	allEntities.erase(std::remove(allEntities.begin(), allEntities.end(), entity), allEntities.end());
+	entity.reset();
 }
 
-// TODO: ???
-void Game::killEnemy()
+void Game::triggerFrightenedMode()
 {
-	if (blinky->getPos() == pacman->getPos())
-	{
-		blinky->destroyEntity();
-		blinky.reset();
-		allEntities.erase(std::remove(allEntities.begin(), allEntities.end(), blinky), allEntities.end());
-	}
-	if (pinky->getPos() == pacman->getPos())
-	{
-		pinky->destroyEntity();
-		pinky.reset();
-		allEntities.erase(std::remove(allEntities.begin(), allEntities.end(), pinky), allEntities.end());
-	}
-	if (inky->getPos() == pacman->getPos())
-	{
-		inky->destroyEntity();
-		inky.reset();
-		allEntities.erase(std::remove(allEntities.begin(), allEntities.end(), inky), allEntities.end());
-	}
-	if (clyde->getPos() == pacman->getPos())
-	{
-		clyde->destroyEntity();
-		clyde.reset();
-		allEntities.erase(std::remove(allEntities.begin(), allEntities.end(), clyde), allEntities.end());
-	}
+	std::cout << "Triggered frightened mode!\n";
+	if (blinky.get())
+		blinky->triggerFrightenedMode();
+	if (pinky.get())
+		pinky->triggerFrightenedMode();
+	if (inky.get())
+		inky->triggerFrightenedMode();
+	if (clyde.get())
+		clyde->triggerFrightenedMode();
 }
 
 void Game::resetGame()

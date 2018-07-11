@@ -9,7 +9,7 @@ enum class State
 {
 	CHASE,
 	SCATTER,
-	GHOST
+	FRIGHTENED
 };
 
 class Enemy : public Entity
@@ -23,7 +23,7 @@ public:
 
 	void toggleShowPath();
 
-	void triggerGhostMode();
+	void triggerFrightenedMode();
 
 protected:
 	void tick(float deltaTime);
@@ -32,7 +32,7 @@ protected:
 
 	void Scatter();
 
-	void Ghost();
+	void Frightened();
 
 	void findPath(sf::Vector2f startLocation, sf::Vector2f endLocation);
 
@@ -59,9 +59,12 @@ protected:
 	bool showPath;
 
 	bool canMove;
-	bool ghostMove;
-
+	bool frightenedMove;
+	bool isUsingFrightenedImage;
 	bool foundPathToScatterTile;
+
+	sf::Image baseImage;
+	sf::Image frightenedModeImage;
 
 	State state;
 
@@ -69,13 +72,13 @@ protected:
 
 	sf::Clock stateClock;
 
-	sf::Clock ghostClock;
-	sf::Time ghostTime;
-	sf::Time ghostTimeElapsed;
+	sf::Clock frightenedClock;
+	sf::Time maxFrightenedTime;
+	sf::Time frightenedTimeElapsed;
 
 	sf::Clock movementClock;
-	sf::Time movementTime;
-	sf::Time movementTimeElapsed;
+	sf::Time timeBetweenMovement;
+	sf::Time timeBetweenMovementElapsed;
 
 	sf::Vector2f bannedPos;
 

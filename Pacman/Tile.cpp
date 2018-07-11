@@ -2,29 +2,41 @@
 #include <iostream>
 #include "Game.h"
 
-Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Game& g,
-	bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, bool Intersection, bool pelletIn, int TileIDin) :
+Tile::Tile(sf::Vector2f Position, Game& g,bool Walkable, bool Spawnpoint, bool Teleporter, bool playerBlock, 
+	bool Intersection, bool pelletIn, int TileIDin) :
 	game{ &g }, isWalkable { Walkable}, isSpawnpoint{ Spawnpoint }, isTeleporter{ Teleporter }, isPlayerBlock{ playerBlock }, 
 	isIntersection{ Intersection }, hasPellet{ pelletIn }, tileID{ TileIDin }, gCost{ 0 }, hasDot{ false }
 { 
+	if (isPlayerBlock && !isSpawnpoint)
+	{
+		if (!originalImage.loadFromFile("images/blackImage.png"))
+		{
+			std::cout << "Failed to load black image!" << std::endl;
+			return;
+		}
+	}
+	else
+	{
+		if (!originalImage.loadFromFile("images/blueImage.png"))
+		{
+			std::cout << "Failed to load blue image!" << std::endl;
+			return;
+		}
+	}
 	baseTexture = std::make_unique<sf::Texture>(sf::Texture());
-
-	baseTexture->loadFromImage(baseImage);
+	baseTexture->loadFromImage(originalImage);
 
 	baseSprite = std::make_unique<sf::Sprite>(sf::Sprite());
 	baseSprite->setTexture(*baseTexture);
-
 	baseSprite->setPosition(Position);
 	baseSprite->setOrigin(8, 8);
-
-	OriginalImage = baseImage;
 
 	if (!greenImage.loadFromFile("images/greenImage.png"))
 	{
 		std::cout << "Failed to load green image!" << std::endl;
 	}
-	pos = Position;
 
+	pos = Position;
 	colBox = std::make_unique<sf::RectangleShape>(sf::RectangleShape());
 	colBox->setSize(sf::Vector2f(16, 16));
 	colBox->setOrigin(sf::Vector2f(8, 8));
@@ -34,6 +46,12 @@ Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Gam
 
 	if (isWalkable && !isSpawnpoint && !Teleporter && !hasPellet)
 	{
+		if (!dotImage.loadFromFile("images/dotImage.png"))
+		{
+			std::cout << "Failed to load dot image!" << std::endl;
+			return;
+		}
+
 		dotTexture = std::make_unique<sf::Texture>(sf::Texture());
 		dotTexture->loadFromImage(dotImage);
 
@@ -49,13 +67,20 @@ Tile::Tile(sf::Image& dotImage, sf::Image& baseImage, sf::Vector2f Position, Gam
 
 	if (hasPellet)
 	{
-		dotTexture = std::make_unique<sf::Texture>(sf::Texture());
-		dotTexture->loadFromImage(dotImage);
+		if (!pelletImage.loadFromFile("images/pelletImage.png"))
+		{
+			std::cout << "Failed to load pelletImage image!" << std::endl;
+			return;
+		}
 
+		if(!dotTexture.get())
+		dotTexture = std::make_unique<sf::Texture>(sf::Texture());
+		dotTexture->loadFromImage(pelletImage);
+		if(!dotSprite.get())
 		dotSprite = std::make_unique<sf::Sprite>(sf::Sprite());
 		dotSprite->setTexture(*dotTexture);
 
-		dotSprite->setOrigin(7, 6);
+		dotSprite->setOrigin(4.5, 6);
 		dotSprite->setPosition(Position);
 	}
 }
@@ -73,7 +98,7 @@ void Tile::Draw(sf::RenderWindow & window)
 
 void Tile::setImageOriginal()
 {
-	baseTexture->loadFromImage(OriginalImage);
+	baseTexture->loadFromImage(originalImage);
 }
 
 void Tile::setImageGreen()

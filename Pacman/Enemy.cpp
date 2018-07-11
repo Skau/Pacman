@@ -1,7 +1,6 @@
 #include "Enemy.h"
 #include <iostream>
 #include <time.h>
-#include <stdlib.h>
 #include "Tile.h"
 #include "Pacman.h"
 #include "Game.h"
@@ -13,6 +12,14 @@ Enemy::Enemy(sf::Image & image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Til
 {
 	srand((int)time(NULL));
 
+	baseImage = image;
+
+	if (!frightenedModeImage.loadFromFile("images/whiteImage.png"))
+	{
+		std::cout << "Failed to load pink image!" << std::endl;
+		return;
+	}
+
 	std::shared_ptr<Tile> st = scatterTileIn.lock();
 	if (st.get())
 	{
@@ -20,8 +27,8 @@ Enemy::Enemy(sf::Image & image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Til
 	}
 	pacman = game.getPacman();
 
-	movementTime = sf::Time(sf::milliseconds(100));
-	ghostTime = sf::Time(sf::seconds(8));
+	timeBetweenMovement = sf::Time(sf::milliseconds(100));
+	maxFrightenedTime = sf::Time(sf::seconds(8));
 
 	if (!isClyde)
 		state = State::SCATTER;
@@ -41,23 +48,45 @@ Enemy::Enemy(sf::Image & image, std::weak_ptr<Tile> SpawnTile, std::weak_ptr<Til
 
 void Enemy::tick(float deltaTime)
 {
-	movementTimeElapsed += movementClock.restart();
+	timeBetweenMovementElapsed += movementClock.restart();
 	if (isStarted)
 	{
-		if (state == State::GHOST)
+		if (state == State::FRIGHTENED)
 		{
-			ghostTimeElapsed += ghostClock.restart();
-			if (ghostTimeElapsed >ghostTime)
+			frightenedTimeElapsed += frightenedClock.restart();
+			texture->loadFromImage(frightenedModeImage);
+			if (frightenedTimeElapsed.asSeconds() >= 5)
 			{
-				std::cout << "Ghost mode done!\n";
-				movementTime = sf::Time(sf::milliseconds(100));
+				if (isUsingFrightenedImage)
+				{
+					texture->loadFromImage(baseImage);
+				}
+				else
+				{
+					texture->loadFromImage(frightenedModeImage);
+				}
+				isUsingFrightenedImage = !isUsingFrightenedImage;
+			}
+			
+			if (frightenedTimeElapsed >maxFrightenedTime)
+			{
+				std::cout << "Frightened mode done!\n";
+				if (isUsingFrightenedImage)
+					texture->loadFromImage(baseImage);
+				timeBetweenMovement = sf::Time(sf::milliseconds(100));
+				frightenedTimeElapsed = sf::Time::Zero;
 				state = State::CHASE;
 			}
 		}
 		else
 		{
-			if (pacman->getPos() == pos) game->resetGame();
-
+			if (pacman->getPos() == pos)
+			{
+				if (pathToMoveTiles.size())
+					for (auto tile : pathToMoveTiles)
+						tile->setImageOriginal();
+				game->resetGame();
+			}
 			if (!isClyde)
 			{
 				if (timeBetweenStates.size())
@@ -83,8 +112,8 @@ void Enemy::tick(float deltaTime)
 		case State::SCATTER:
 			Scatter();
 			break;
-		case State::GHOST:
-			Ghost();
+		case State::FRIGHTENED:
+			Frightened();
 			break;
 		default:
 			break;
@@ -120,9 +149,9 @@ void Enemy::Scatter()
 	}
 }
 
-void Enemy::Ghost()
+void Enemy::Frightened()
 {
-	if (pos == pacman->getPos()) game->killEnemy();
+	if (pos == pacman->getPos()) setIsDead(true);
 
 	if (!pathToMoveTiles.size())
 	{
@@ -357,8 +386,7 @@ void Enemy::generatePath(std::shared_ptr<Tile> finalTile)
 
 void Enemy::move()
 {
-	// Bool is there to half the movement speed
-	if (pathToMoveTiles.size() && movementTimeElapsed > movementTime)
+	if (pathToMoveTiles.size() && timeBetweenMovementElapsed > timeBetweenMovement)
 	{
 		bannedPos = CurrentTile->getPos();
 		if (pathToMoveTiles.back().get())
@@ -369,7 +397,7 @@ void Enemy::move()
 			colBox->setPosition(pos);
 			pathToMoveTiles.back()->setImageOriginal();
 			pathToMoveTiles.pop_back();
-			movementTimeElapsed = sf::Time::Zero;
+			timeBetweenMovementElapsed = sf::Time::Zero;
 		}
 	}
 	else if (!pathToMoveTiles.size() && foundPathToScatterTile)
@@ -445,10 +473,14 @@ void Enemy::toggleShowPath()
 	showPath = !showPath;
 }
 
-void Enemy::triggerGhostMode()
+void Enemy::triggerFrightenedMode()
 {
-	state = State::GHOST;
-	movementTime = movementTime = sf::Time(sf::milliseconds(250));
-	ghostClock.restart();
+	if (isStarted)
+	{
+		state = State::FRIGHTENED;
+		timeBetweenMovement = sf::Time(sf::milliseconds(250));
+		frightenedTimeElapsed = sf::Time::Zero;
+		frightenedClock.restart();
+	}
 }
 

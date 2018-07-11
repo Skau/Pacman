@@ -116,7 +116,6 @@ void Inky::Chase()
 					{
 						movePos.y = twoTilesInFrontPos.y;
 					}
-					std::cout << movePos.x << ", " << movePos.y << std::endl;
 					findPath(pos, movePos);
 				}
 				else

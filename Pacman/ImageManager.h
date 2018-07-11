@@ -6,12 +6,14 @@ class ImageManager
 {
 public:
 	ImageManager();
-	~ImageManager();
+	~ImageManager()=default;
 
-	void addImage(sf::Image& image) { imageList.push_back(image); }
+
 	sf::Image& getImage(int index) { return imageList[index]; }
 
 private:
+	void loadImages();
+	
 	std::vector<sf::Image> imageList;
 };
 
