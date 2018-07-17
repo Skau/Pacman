@@ -19,25 +19,25 @@ void Pacman::handleEvent(sf::Event & event)
 			{
 				switch (event.key.code)
 				{
-				case sf::Keyboard::W:
+				case sf::Keyboard::Up:
 				{
 					moveDirection = Direction::UP;
 					isMoving = true;
 					break;
 				}
-				case sf::Keyboard::S: 
+				case sf::Keyboard::Down: 
 				{
 					moveDirection = Direction::DOWN;
 					isMoving = true;
 					break;
 				}
-				case sf::Keyboard::D:
+				case sf::Keyboard::Right:
 				{ 
 					moveDirection = Direction::RIGHT;
 					isMoving = true;
 					break;
 				}
-				case sf::Keyboard::A:
+				case sf::Keyboard::Left:
 				{
 					moveDirection = Direction::LEFT;
 					isMoving = true;
